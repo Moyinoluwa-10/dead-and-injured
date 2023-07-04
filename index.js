@@ -31,6 +31,7 @@ numberInputs.forEach((input)=>{
     input.classList.remove("won-game")
 })
 winmsg.classList.remove('active')
+guessmsg.textContent = ""
 
 console.log(hiddenNumber);
 
