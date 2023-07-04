@@ -1,8 +1,8 @@
 /* Get the value from the input box */
 let a = document.querySelector("#box-1");
-// let b = document.querySelector("#box-2");
-// let c = document.querySelector("#box-3");
-// let d = document.querySelector("#box-4");
+let b = document.querySelector("#box-2");
+let c = document.querySelector("#box-3");
+let d = document.querySelector("#box-4");
 // let e = document.querySelector("#box-5");
 const guessmsg = document.querySelector('.alert')
 
@@ -27,17 +27,26 @@ function getRandomNumber(a, b, c, d) {
 
 function confirmAnswer() {
 // let numbers = [Number(a.value), Number(b.value), Number(c.value), Number(d.value)];
-let numbers = a.value.split('')
-const newNumbers = numbers.map((curr)=> Number(curr))
+let numbers = [a.value,b.value,c.value,d.value];
+
+// New array created to avoid undefined inputs being printed as "0"
+const refineNumbers = numbers.map((curr)=>{
+    if(curr === ""){
+        curr = undefined
+    } else {
+        return Number(curr)
+    }
+}).filter((curr)=> curr !== undefined)
+
 
 let deadArrComp = []
 let injuredArrComp = []
 
 hiddenNumber.forEach((i, idx)=> {
- let deadArr = newNumbers.filter((el, index)=>{
+ let deadArr = refineNumbers.filter((el, index)=>{
 return i === el && idx === index
 })
- let injuredArr = newNumbers.filter((el, index)=>{
+ let injuredArr = refineNumbers.filter((el, index)=>{
 return i === el && idx !== index
 })
 
@@ -52,17 +61,19 @@ let injuredNum = injuredArrComp.flat().length
 
   console.log(deadNum)
   console.log(injuredNum)
-  console.log(newNumbers);
-  console.log(numbers);
+  console.log(refineNumbers);
 
   guessmsg.classList.add("active")
 
 //  checking if there a number is recurring in the input
-  if(newNumbers[0] === newNumbers[1] || newNumbers[0] === newNumbers[2] || newNumbers[0] === newNumbers [3]
-    || newNumbers[1] === newNumbers[2] || newNumbers[1] === newNumbers [3] || newNumbers[2] === newNumbers [3]
+  if(refineNumbers[0] === refineNumbers[1] || refineNumbers[0] === refineNumbers[2] || refineNumbers[0] === refineNumbers [3]
+    || refineNumbers[1] === refineNumbers[2] || refineNumbers[1] === refineNumbers [3] || refineNumbers[2] === refineNumbers [3]
     ) {
         guessmsg.textContent = `Repeating Numbers detected!`
-    } else {
+    } else if(refineNumbers.length < 4){
+        guessmsg.textContent = `Insufficient Numbers!`
+    }
+    else {
         guessmsg.textContent = `${deadNum} Dead, ${injuredNum} Injured`
     }
 
