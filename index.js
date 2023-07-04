@@ -67,4 +67,14 @@ let injuredNum = injuredArrComp.flat().length
 
 }
 
+// code to check for max length
+document.querySelectorAll('input[type="number"]').forEach((input)=>{
 
+    console.log(input.maxLength)
+
+    input.oninput = () =>{
+        if(input.value.length > input.maxLength){
+            input.value = input.value.slice(0, input.maxLength)
+        }
+    }
+})
