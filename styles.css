@@ -18,6 +18,7 @@ body {
     min-height: 100vh;
     font-family: sans-serif;
     background-color: lightblue;
+    position: relative;
 }
 
 
@@ -53,11 +54,15 @@ body {
     letter-spacing: 10px;
 }
 
+.box input.won-game{
+    pointer-events: none;    
+}
+
 .box input:focus {
     outline: none;
 }
 
-.guess-btn{
+.guess-btn, .get-number{
     padding: 10px;
     margin-top: 40px;
     font-size: 1.5rem;
@@ -66,6 +71,22 @@ body {
     color: white;
     background-color: black;
     cursor: pointer;
+    pointer-events: all;
+}
+
+.get-number{
+    display: none;
+    pointer-events: none;
+}
+
+.guess-btn.active{
+    display: none;
+    pointer-events: none;
+}
+
+.get-number.active{
+    display: block;
+    pointer-events: all;
 }
 
 .alert{
@@ -76,6 +97,49 @@ body {
 
 .alert.active{
     opacity: 1;
+}
+
+.win{
+    position: fixed;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: black;
+    color: white;
+    top: 80%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    height: 200px;
+    width: 200px;
+    border-radius: 10px;
+    font-size: 1.625rem;
+    opacity: 0;
+    pointer-events: none;
+    transition: 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+}
+
+.win.active{
+    opacity: 1;
+    pointer-events: all;
+    top: 50%;
+}
+
+.close-btn{
+    position: absolute;
+    right: 10px;
+    top: 10px;
+    bottom: 20px;
+    border: 1px solid white;
+    border-radius: 50%;
+    height: 10px;
+    width: 10px;
+    text-align: center;
+    padding: 10px;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    cursor: pointer;
 }
 
 @media screen and (max-width: 760px) {

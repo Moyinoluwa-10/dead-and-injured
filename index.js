@@ -5,15 +5,39 @@ let c = document.querySelector("#box-3");
 let d = document.querySelector("#box-4");
 // let e = document.querySelector("#box-5");
 const guessmsg = document.querySelector('.alert')
+const winmsg = document.querySelector('.win')
+const closeBtn = document.querySelector('.close-btn')
+const guessBtn = document.querySelector('.guess-btn')
+const getNumBtn = document.querySelector(".get-number")
+const numberInputs = document.querySelectorAll('.number-input')
+let hiddenNumber 
 
+const getNewNumber = () =>{
 let v = getRandomNumber()
 let w = getRandomNumber(v)
 let x = getRandomNumber(w,v)
 let y = getRandomNumber(v,w,x)
 // let z = getRandomNumber(v,w,y,x)
 
-let hiddenNumber = [v, w, x, y]
+hiddenNumber = [v, w, x, y]
+// clears input values
+numberInputs.forEach((input)=>{
+    input.value = ""
+})
+// removes active classes
+guessBtn.classList.remove('active');
+getNumBtn.classList.remove('active')
+numberInputs.forEach((input)=>{
+    input.classList.remove("won-game")
+})
+winmsg.classList.remove('active')
+
 console.log(hiddenNumber);
+
+}
+
+getNewNumber()
+
 
 function getRandomNumber(a, b, c, d) {
   let number = Math.floor(Math.random() * 10);
@@ -66,18 +90,38 @@ let injuredNum = injuredArrComp.flat().length
   guessmsg.classList.add("active")
 
 //  checking if there a number is recurring in the input
-  if(refineNumbers[0] === refineNumbers[1] || refineNumbers[0] === refineNumbers[2] || refineNumbers[0] === refineNumbers [3]
+if(refineNumbers.length < 4 || refineNumbers.length === 0){
+    guessmsg.textContent = `Insufficient Numbers!`
+}else if(refineNumbers[0] === refineNumbers[1] || refineNumbers[0] === refineNumbers[2] || refineNumbers[0] === refineNumbers [3]
     || refineNumbers[1] === refineNumbers[2] || refineNumbers[1] === refineNumbers [3] || refineNumbers[2] === refineNumbers [3]
     ) {
         guessmsg.textContent = `Repeating Numbers detected!`
-    } else if(refineNumbers.length < 4){
-        guessmsg.textContent = `Insufficient Numbers!`
-    }
+    } 
     else {
         guessmsg.textContent = `${deadNum} Dead, ${injuredNum} Injured`
     }
 
+    // if the player wins
+    if(guessmsg.textContent === `4 Dead, 0 Injured`){
+        winmsg.classList.add('active')
+        numberInputs.forEach((input)=>{
+            input.classList.add("won-game")
+        })
+        
+        setTimeout(()=>{
+            guessBtn.classList.add('active');
+            getNumBtn.classList.add('active')
+        }, 600)
+    }
+
+    closeBtn.addEventListener('click', ()=>{
+        winmsg.classList.remove('active')
+    })
+
 }
+
+getNumBtn.addEventListener('click', getNewNumber)
+
 
 // code to check for max length
 document.querySelectorAll('input[type="number"]').forEach((input)=>{
