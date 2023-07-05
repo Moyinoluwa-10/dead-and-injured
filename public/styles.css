@@ -249,6 +249,10 @@ body {
   pointer-events: all;
 }
 
+.guess-btn{
+  background-color: green;
+}
+
 .turn-state{
   display: none;
   transition: 0.3s ease;
@@ -258,7 +262,7 @@ body {
 }
 
 .turn-state.active{
-  background-color: green;
+  background-color: black;
   padding: 10px;
 display: block;
   pointer-events: all;
