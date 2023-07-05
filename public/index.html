@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Dead and Injured</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="wrapper">
+      <div class="player-list"></div>
+
+      <div class="right">
+        <h1 class="heading">Dead and Injured</h1>
+
+        <div class="container">
+          <div class="box">
+            <input
+              type="number"
+              class="number-input"
+              name="answer"
+              id="box-1"
+              maxlength="1"
+            />
+          </div>
+          <div class="box">
+            <input
+              type="number"
+              class="number-input"
+              name="answer"
+              id="box-2"
+              maxlength="1"
+            />
+          </div>
+          <div class="box">
+            <input
+              type="number"
+              class="number-input"
+              name="answer"
+              id="box-3"
+              maxlength="1"
+            />
+          </div>
+          <div class="box">
+            <input
+              type="number"
+              class="number-input"
+              name="answer"
+              id="box-4"
+              maxlength="1"
+            />
+          </div>
+          <!-- <div class="box"><input type="number" name="answer" id="box-5" maxlength="1"></div> -->
+        </div>
+
+        <button class="guess-btn" onclick="submitAnswer()">Guess!</button><br />
+        <button class="get-number">Get New Number</button><br />
+
+        <p class="alert"></p>
+
+        <div class="win">
+          <span class="span"> YOU WIN!</span>
+
+          <div class="close-btn">✕</div>
+        </div>
+        <p class="credits">
+          Made with <i class="fa-sharp fa-solid fa-heart"></i> by
+          <a href="https://twitter.com/t3ch_spawn">Boluwatife</a> and
+          <a href="https://twitter.com/rotii_mii">Moyinoluwa</a>
+        </p>
+      </div>
+    </div>
+
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="index.js"></script>
+    <script src="server.js"></script>
+  </body>
+</html>
