@@ -10,9 +10,28 @@ const closeBtn = document.querySelector(".close-btn");
 const guessBtn = document.querySelector(".guess-btn");
 const getNumBtn = document.querySelector(".get-number");
 const numberInputs = document.querySelectorAll(".number-input");
+const customInput = document.querySelector('.custom-number-input')
+const backGame = document.querySelector('.back-game')
+const customInpErr = document.querySelector('.custom-number-error')
+const customNumCont = document.querySelector('.custom-number-container')
 let hiddenNumber;
+let customNum
 const playerList = document.querySelector(".player-list");
 let yourOpponent
+
+// This function checks for repeating numbers
+const repeatingNums = (Num) =>{
+  if(Num[0] === Num[1] ||
+    Num[0] === Num[2] ||
+    Num[0] === Num[3] ||
+    Num[1] === Num[2] ||
+    Num[1] === Num[3] ||
+    Num[2] === Num[3]) {
+      return true
+    } else {
+      return false
+    }
+}
 
 const players = [];
 const socket = io();
@@ -20,6 +39,9 @@ let username = sessionStorage.getItem("username");
 if (!username) {
   username = prompt("Enter a username: ");
   sessionStorage.setItem("username", username);
+} 
+while(username === null || username === ""){
+  username = prompt("Whats your username")
 }
 let sendTo;
 
@@ -30,7 +52,26 @@ socket.on("connect", () => {
   console.log("connected to server");
   socket.emit("user:enter", { id: socket.id, username });
   // create an 4 digit number for the user
-  const value = getNewNumber();
+  let value = getNewNumber();
+
+  // code to enter/input custom 
+  backGame.addEventListener('click', ()=>{
+    customNum = customInput.value
+    const customNumArr = customNum.split('')  
+
+    if (customNumArr.length < 4 ) {
+      customInpErr.textContent = `Insufficient Numbers!`;
+    } else if (repeatingNums(customNumArr)) {
+      customInpErr.textContent = `Repeating Numbers detected!`;
+    } else{
+      customNumCont.classList.remove('active')
+    }
+    value = customNumArr
+    document.querySelector('.your-number').textContent = `Your number: ${customNumArr.join('')}`
+  players.push({ id: socket.id, username, value });
+
+  })
+
   players.push({ id: socket.id, username, value });
   console.log(players);
 });
@@ -178,15 +219,11 @@ function confirmAnswer(msg) {
   let report;
 
   //  checking if there a number is recurring in the input
+
   if (msg.value.length < 4 || msg.value.length === 0) {
     report = `Insufficient Numbers!`;
   } else if (
-    msg.value[0] === msg.value[1] ||
-    msg.value[0] === msg.value[2] ||
-    msg.value[0] === msg.value[3] ||
-    msg.value[1] === msg.value[2] ||
-    msg.value[1] === msg.value[3] ||
-    msg.value[2] === msg.value[3]
+    repeatingNums(msg.value)
   ) {
     report = `Repeating Numbers detected!`;
   } else {
@@ -241,7 +278,7 @@ function showReport(msg) {
 getNumBtn.addEventListener("click", getNewNumber);
 
 // code to check for max length
-document.querySelectorAll('input[type="number"]').forEach((input) => {
+document.querySelectorAll('.number-input').forEach((input) => {
   console.log(input.maxLength);
 
   input.oninput = () => {
@@ -250,6 +287,18 @@ document.querySelectorAll('input[type="number"]').forEach((input) => {
     }
   };
 });
+
+document.querySelectorAll('.custom-number-input').forEach((input) => {
+  console.log(input.maxLength);
+
+  input.oninput = () => {
+    if (input.value.length > input.maxLength) {
+      input.value = input.value.slice(0, input.maxLength);
+    }
+  };
+});
+
+
 
 // function to create a player
 function createNewPlayer(data) {
@@ -298,4 +347,11 @@ showPlayers.addEventListener('click', ()=>{
 
 closeBtn_players.addEventListener('click', ()=>{
     playerList.classList.add("hidden")
+})
+
+
+// CODE TO SHOW CUSTOM INPUT FIELD
+const chooseNum = document.querySelector('.choose-number')
+chooseNum.addEventListener('click', ()=>{
+  customNumCont.classList.add('active')
 })
