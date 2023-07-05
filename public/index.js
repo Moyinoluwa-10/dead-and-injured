@@ -197,7 +197,7 @@ function submitAnswer() {
 
     // code to append guesses and responses
     document.querySelector('.guess-history').classList.add('active')
-
+    document.querySelector('.opponent-guess').textContent =`${yourOpponent}'s guesses`
     setTimeout(() => {
       let historyHtml
       historyArr.forEach((el)=>{
@@ -265,7 +265,7 @@ function confirmAnswer(msg) {
   })
 
     // code to append guesses and responses of opponent
-    document.querySelector('.opponent-guess').textContent =`${yourOpponent}'s guesses`
+    
     setTimeout(() => {
       let historyHtml
       historyArr2.forEach((el)=>{
@@ -336,16 +336,19 @@ document.querySelectorAll('.number-input').forEach((input) => {
   };
 });
 
-document.querySelectorAll('.custom-number-input').forEach((input) => {
-  console.log(input.maxLength);
+customInput.oninput = () =>{
+  if (customInput.value.length > customInput.maxLength) {
+    customInput.value = customInput.value.slice(0, customInput.maxLength);
+  }
+}
 
-  input.oninput = () => {
-    if (input.value.length > input.maxLength) {
-      input.value = input.value.slice(0, input.maxLength);
-    }
-  };
-});
+const lastInput = document.querySelector('.last-input')
 
+lastInput.oninput = () =>{
+  if (lastInput.value.length > lastInput.maxLength) {
+    lastInput.value = lastInput.value.slice(0, lastInput.maxLength);
+  }
+}
 
 
 // function to create a player

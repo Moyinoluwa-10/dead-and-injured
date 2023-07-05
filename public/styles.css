@@ -46,7 +46,7 @@ body {
   text-decoration: underline;
   cursor: pointer;
   text-align: center;
-  pointer-events: none;
+  /* pointer-events: none; */
 }
 
 .custom-number-container{
@@ -376,7 +376,13 @@ body {
 
 .history-table-2{
   border: 1px solid black;
-  padding: 10px
+  padding: 10px;
+  max-height: 100px;
+  overflow-y: scroll;
+}
+
+.opponent-guess{
+  margin-top: 20px;
 }
 
 .history-row-heading{
