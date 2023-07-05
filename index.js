@@ -6,14 +6,15 @@ const server = http.createServer(app);
 // const io = new Server(server);
 const PORT = process.env.PORT || 3000;
 const io = require("socket.io")(server, { cors: { origin: "*" } });
+const path = require("path");
 
 app.use(express.json());
-app.use(express.static("public"));
+app.use(express.static(path.join(__dirname, "public")));
 
-app.get("/", (req, res) => {
-  res.setHeader("Content-Type", "text/html");
-  res.sendFile(__dirname + "/public/index.html");
-});
+// app.get("/", (req, res) => {
+//   res.setHeader("Content-Type", "text/html");
+//   // res.sendFile(__dirname + "/index.html");
+// });
 
 io.on("connection", (socket) => {
   console.log("a user connected " + socket.id);
