@@ -208,7 +208,7 @@ function submitAnswer() {
     
       })
       document.querySelector('.history-table').insertAdjacentHTML('beforeend', historyHtml);
-    }, 500);
+    }, 800);
     
   guessBtn.disabled = true;
 
