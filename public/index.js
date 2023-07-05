@@ -73,7 +73,7 @@ socket.on("connect", () => {
   })
 
   players.push({ id: socket.id, username, value });
-  console.log(players);
+  // console.log(players);
 });
 
 socket.on("user:enter", (user) => {
@@ -161,6 +161,11 @@ function getRandomNumber(a, b, c, d) {
   return number;
 }
 
+// Array that stores guesses and responses
+const historyArr = []
+let report2 = []
+
+
 // function to submit answer
 function submitAnswer() {
   // let numbers = [Number(a.value), Number(b.value), Number(c.value), Number(d.value)];
@@ -183,6 +188,28 @@ function submitAnswer() {
     value: refineNumbers,
   };
 
+  
+
+  historyArr.push({
+    guess: msg.value,
+    response: report2
+  })
+
+    // code to append guesses and responses
+    document.querySelector('.guess-history').classList.add('active')
+
+    setTimeout(() => {
+      let historyHtml
+      historyArr.forEach((el)=>{
+         historyHtml = ` <div class="history-row">
+        <div class="history-guess">${el.guess.join('')}</div>
+        <div class="history-response">${el.response[0]}</div>
+      </div>`;
+    
+      })
+      document.querySelector('.history-table').insertAdjacentHTML('beforeend', historyHtml);
+    }, 500);
+    
   guessBtn.disabled = true;
 
   document.querySelector('.turn-state').classList.add('active')
@@ -191,6 +218,8 @@ function submitAnswer() {
   // send answer to your opponent
   socket.emit("submitAnswer:post", sendTo, msg);
 }
+
+
 
 // function to confirm answer
 function confirmAnswer(msg) {
@@ -212,14 +241,11 @@ function confirmAnswer(msg) {
   let deadNum = deadArrComp.flat().length;
   let injuredNum = injuredArrComp.flat().length;
 
-  console.log(deadNum);
-  console.log(injuredNum);
   console.log(msg.value);
 
   let report;
 
   //  checking if there a number is recurring in the input
-
   if (msg.value.length < 4 || msg.value.length === 0) {
     report = `Insufficient Numbers!`;
   } else if (
@@ -256,6 +282,9 @@ function confirmAnswer(msg) {
 function showReport(msg) {
   guessMsg.classList.add("active");
   guessMsg.textContent = msg;
+
+  report2.shift()
+  report2.push(msg)
 
   // if the player wins
   if (msg === `4 Dead, 0 Injured`) {
