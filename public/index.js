@@ -220,7 +220,7 @@ function submitAnswer() {
 }
 
 
-
+const historyArr2 =[]
 // function to confirm answer
 function confirmAnswer(msg) {
   let deadArrComp = [];
@@ -258,6 +258,25 @@ function confirmAnswer(msg) {
 
   // send the result of the opponents answer back to him
   socket.emit("receiveReport:post", msg.userId, report);
+
+  historyArr2.push({
+    guess: msg.value,
+    response: report
+  })
+
+    // code to append guesses and responses of opponent
+    document.querySelector('.opponent-guess').textContent =`${yourOpponent}'s guesses`
+    setTimeout(() => {
+      let historyHtml
+      historyArr2.forEach((el)=>{
+         historyHtml = ` <div class="history-row">
+        <div class="history-guess">${el.guess.join('')}</div>
+        <div class="history-response">${report}</div>
+      </div>`;
+    
+      })
+      document.querySelector('.history-table-2').insertAdjacentHTML('beforeend', historyHtml);
+    }, 800);
 
   // if the player loses
   if (report === `4 Dead, 0 Injured`) {
