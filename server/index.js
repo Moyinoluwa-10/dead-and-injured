@@ -17,7 +17,7 @@ app.get("/", (req, res) => {
 
 io.on("connection", (socket) => {
   console.log("a user connected " + socket.id);
-  io.emit("user_connected ", "a user connected");
+  // io.emit("user_connected", "a user connected");
   socket.on("disconnect", () => {
     console.log("user disconnected " + socket.id);
   });
@@ -51,20 +51,12 @@ io.on("connection", async (socket) => {
     socket.broadcast.emit("user:leave", socket.id);
   });
 
-  socket.on("groupMsg:post", (msg) => {
-    socket.broadcast.emit("groupMsg:get", msg);
+  socket.on("submitAnswer:post", (id, msg) => {
+    socket.to(id).emit("submitAnswer:get", msg);
   });
 
-  socket.on("privMsg:post", (id, msg) => {
-    // Send message to user with id
-    socket.to(id).emit("privMsg:get", msg);
-  });
-
-  socket.on("answer:post", (id, msg) => {
-    // Send message to user with id
-    console.log("answer:post", id, msg);
-    socket.to(id).emit("answer:get", msg);
-    console.log("msg sent");
+  socket.on("receiveReport:post", (id, msg) => {
+    socket.to(id).emit("receiveReport:get", msg);
   });
 });
 

@@ -4,8 +4,8 @@ let b = document.querySelector("#box-2");
 let c = document.querySelector("#box-3");
 let d = document.querySelector("#box-4");
 // let e = document.querySelector("#box-5");
-const guessmsg = document.querySelector(".alert");
-const winmsg = document.querySelector(".win");
+const guessMsg = document.querySelector(".alert");
+const winMsg = document.querySelector(".win");
 const closeBtn = document.querySelector(".close-btn");
 const guessBtn = document.querySelector(".guess-btn");
 const getNumBtn = document.querySelector(".get-number");
@@ -52,24 +52,21 @@ socket.on("user:leave", (id) => {
   player.remove();
 });
 
-socket.on("privMsg:get", (msg) => {
-  // Create message element and add it to page
-  // if (sendTo === msg.userId) createMessage(msg);
-  console.log(msg);
+socket.on("submitAnswer:get", (msg) => {
+  // console.log(msg);
   confirmAnswer(msg);
   guessBtn.disabled = false;
 });
 
-socket.on("answer:get", (msg) => {
-  // Create message element and add it to page
-  console.log("answer", msg);
+socket.on("receiveReport:get", (msg) => {
+  // console.log("receiveReport", msg);
   showReport(msg);
 });
 
 const getNewNumber = () => {
   let v = getRandomNumber();
   let w = getRandomNumber(v);
-  let x = getRandomNumber(w, v);
+  let x = getRandomNumber(v, w);
   let y = getRandomNumber(v, w, x);
   // let z = getRandomNumber(v,w,y,x)
 
@@ -84,8 +81,8 @@ const getNewNumber = () => {
   numberInputs.forEach((input) => {
     input.classList.remove("won-game");
   });
-  winmsg.classList.remove("active");
-  guessmsg.textContent = "";
+  winMsg.classList.remove("active");
+  guessMsg.textContent = "";
 
   // console.log(hiddenNumber);
   return hiddenNumber;
@@ -105,7 +102,7 @@ numberInputs.forEach((input) => {
   });
 });
 
-getNewNumber();
+// getNewNumber();
 
 function getRandomNumber(a, b, c, d) {
   let number = Math.floor(Math.random() * 10);
@@ -116,8 +113,8 @@ function getRandomNumber(a, b, c, d) {
   return number;
 }
 
+// function to submit answer
 function submitAnswer() {
-  console.log("submit answer");
   // let numbers = [Number(a.value), Number(b.value), Number(c.value), Number(d.value)];
   let numbers = [a.value, b.value, c.value, d.value];
 
@@ -137,20 +134,19 @@ function submitAnswer() {
     username,
     value: refineNumbers,
   };
-  socket.emit("privMsg:post", sendTo, msg);
-  // confirmAnswer(msg.value);
+
+  guessBtn.disabled = true;
+  // send answer to your opponent
+  socket.emit("submitAnswer:post", sendTo, msg);
 }
 
+// function to confirm answer
 function confirmAnswer(msg) {
-  console.log(hiddenNumber, "hiddenAnswer");
-  console.log(msg.value, "msg");
-
   let deadArrComp = [];
   let injuredArrComp = [];
 
   hiddenNumber.forEach((i, idx) => {
     let deadArr = msg.value.filter((el, index) => {
-      // console.log(i, el, idx, index);
       return i === el && idx === index;
     });
     let injuredArr = msg.value.filter((el, index) => {
@@ -168,11 +164,11 @@ function confirmAnswer(msg) {
   console.log(injuredNum);
   console.log(msg.value);
 
-  let ans;
+  let report;
 
   //  checking if there a number is recurring in the input
   if (msg.value.length < 4 || msg.value.length === 0) {
-    ans = `Insufficient Numbers!`;
+    report = `Insufficient Numbers!`;
   } else if (
     msg.value[0] === msg.value[1] ||
     msg.value[0] === msg.value[2] ||
@@ -181,24 +177,18 @@ function confirmAnswer(msg) {
     msg.value[1] === msg.value[3] ||
     msg.value[2] === msg.value[3]
   ) {
-    ans = `Repeating Numbers detected!`;
+    report = `Repeating Numbers detected!`;
   } else {
-    ans = `${deadNum} Dead, ${injuredNum} Injured`;
+    report = `${deadNum} Dead, ${injuredNum} Injured`;
   }
 
-  console.log(ans);
+  // send the result of the opponents answer back to him
+  socket.emit("receiveReport:post", msg.userId, report);
 
-  socket.emit("answer:post", msg.userId, ans);
-}
-
-const showReport = (msg) => {
-  guessmsg.classList.add("active");
-  guessmsg.textContent = msg;
-  guessBtn.disabled = true;
-
-  // if the player wins
-  if (msg === `4 Dead, 0 Injured`) {
-    winmsg.classList.add("active");
+  // if the player loses
+  if (report === `4 Dead, 0 Injured`) {
+    document.querySelector(".span").textContent = `You Lose!`;
+    winMsg.classList.add("active");
     numberInputs.forEach((input) => {
       input.classList.add("won-game");
     });
@@ -210,9 +200,32 @@ const showReport = (msg) => {
   }
 
   closeBtn.addEventListener("click", () => {
-    winmsg.classList.remove("active");
+    winMsg.classList.remove("active");
   });
-};
+}
+
+// function to show the result of your answer
+function showReport(msg) {
+  guessMsg.classList.add("active");
+  guessMsg.textContent = msg;
+
+  // if the player wins
+  if (msg === `4 Dead, 0 Injured`) {
+    winMsg.classList.add("active");
+    numberInputs.forEach((input) => {
+      input.classList.add("won-game");
+    });
+
+    setTimeout(() => {
+      guessBtn.classList.add("active");
+      getNumBtn.classList.add("active");
+    }, 600);
+  }
+
+  closeBtn.addEventListener("click", () => {
+    winMsg.classList.remove("active");
+  });
+}
 
 getNumBtn.addEventListener("click", getNewNumber);
 
@@ -227,7 +240,8 @@ document.querySelectorAll('input[type="number"]').forEach((input) => {
   };
 });
 
-const createNewPlayer = (data) => {
+// function to create a player
+function createNewPlayer(data) {
   // create a new player
   const player = document.createElement("div");
   // add player attributes
@@ -240,8 +254,9 @@ const createNewPlayer = (data) => {
 
   // update player list with new player
   playerList.appendChild(player);
-};
+}
 
+// function to select a player
 function selectPlayer(e) {
   // get selected player
   const player = e.currentTarget;
