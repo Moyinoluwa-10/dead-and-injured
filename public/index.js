@@ -110,6 +110,9 @@ socket.on("submitAnswer:get", (msg) => {
   // it's your turn to guess
   turnState.classList.add('active')
   turnState.textContent = `Your turn`
+  if(!guessBtn.disabled){
+    guessBtn.textContent = "Guess!"
+  }
 });
 
 socket.on("receiveReport:get", (msg) => {
