@@ -181,6 +181,10 @@ body {
   cursor: pointer;
 }
 
+.credits a {
+  color: black;
+}
+
 @media screen and (max-width: 760px) {
   html {
     font-size: 12px;
