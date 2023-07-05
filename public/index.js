@@ -231,7 +231,7 @@ function submitAnswer() {
   turnState.textContent = `${yourOpponent}'s turn`
   // change content of button depending on state
   if(guessBtn.disabled){
-    guessBtn.text = "Wait!"
+    guessBtn.textContent = "Wait!"
   }
   // send answer to your opponent
     socket.emit("submitAnswer:post", sendTo, msg);
