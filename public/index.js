@@ -362,10 +362,15 @@ function createNewPlayer(data) {
 
   // add click event handler
   player.addEventListener("click", selectPlayer);
+  player.addEventListener("click", ()=>{
+    playerList.classList.add('hidden')
+  });
 
   // update player list with new player
   playerList.appendChild(player);
 }
+
+
 
 // function to select a player
 function selectPlayer(e) {
