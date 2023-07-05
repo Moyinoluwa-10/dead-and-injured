@@ -12,6 +12,7 @@ const getNumBtn = document.querySelector(".get-number");
 const numberInputs = document.querySelectorAll(".number-input");
 let hiddenNumber;
 const playerList = document.querySelector(".player-list");
+let yourOpponent
 
 const players = [];
 const socket = io();
@@ -21,6 +22,9 @@ if (!username) {
   sessionStorage.setItem("username", username);
 }
 let sendTo;
+
+// shows player his/her username
+document.querySelector('.your-username').textContent = `Username: ${username}`
 
 socket.on("connect", () => {
   console.log("connected to server");
@@ -56,6 +60,9 @@ socket.on("submitAnswer:get", (msg) => {
   // console.log(msg);
   confirmAnswer(msg);
   guessBtn.disabled = false;
+  // it's your turn to guess
+  document.querySelector('.turn-state').classList.add('active')
+  document.querySelector('.turn-state').textContent = `Your turn`
 });
 
 socket.on("receiveReport:get", (msg) => {
@@ -136,6 +143,10 @@ function submitAnswer() {
   };
 
   guessBtn.disabled = true;
+
+  document.querySelector('.turn-state').classList.add('active')
+  // your opponent is guessing..
+  document.querySelector('.turn-state').textContent = `${yourOpponent}'s turn`
   // send answer to your opponent
   socket.emit("submitAnswer:post", sendTo, msg);
 }
@@ -260,7 +271,8 @@ function createNewPlayer(data) {
 function selectPlayer(e) {
   // get selected player
   const player = e.currentTarget;
-
+  yourOpponent = e.currentTarget.innerText 
+document.querySelector('.opponent-username').textContent = `Opponent: ${yourOpponent}`
   // make sure player isn't currently selected
   if (!player.classList.contains("player--selected")) {
     // remove previously highlighted player
@@ -273,3 +285,17 @@ function selectPlayer(e) {
     sendTo = player.id;
   }
 }
+
+
+
+// CODE FOR HAMBURGER MENU OF PLAYERS
+const showPlayers = document.querySelector('.see-players')
+const closeBtn_players = document.querySelector('.close-btn--players')
+
+showPlayers.addEventListener('click', ()=>{
+    playerList.classList.toggle("hidden")
+})
+
+closeBtn_players.addEventListener('click', ()=>{
+    playerList.classList.add("hidden")
+})

@@ -24,6 +24,16 @@ body {
 .wrapper {
   display: flex;
   width: 100%;
+  background-color: lightblue;
+  position: relative;
+}
+
+.see-players{
+  position: absolute;
+  z-index: 2;
+  top: 10px;
+  left: 10px;
+  text-decoration: underline;
 }
 
 .player-list {
@@ -32,14 +42,73 @@ body {
   width: 300px;
   overflow: hidden;
   overflow-y: scroll;
+  padding-top: 50px;
+  position: absolute;
+  z-index: 1;
+  pointer-events: all;
+}
+
+.player-list > div:nth-child(2){
+  margin-top: 10px;
+}
+
+.player-list.hidden{
+  opacity: 0;
+  pointer-events: none;
+}
+
+.close-btn--players{
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  bottom: 20px;
+  border: 1px solid black;
+  border-radius: 50%;
+  height: 20px;
+  width: 20px;
+  text-align: center;
+  padding: 20px;
+  font-size: 1.4rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+}
+
+.game-container{
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  padding: 0 30px;
+  padding-top: 50px;
+  position: relative;
+  min-height: 100vh;
+}
+
+.user-container{
+  display: flex;
+  gap: 30px;
+  width: 100%;
+  padding-top: 50px;
+  position: relative;
+}
+
+@media screen and (max-width: 820px) {
+  .user-container{
+    flex-direction: column;
+  }
+}
+
+.your-username{
+  margin-bottom: 10px;
 }
 
 .right {
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  justify-content: flex-start;
   align-items: center;
-  min-height: 100vh;
+  /* min-height: 100vh; */
   background-color: lightblue;
   position: relative;
   width: 100%;
@@ -58,6 +127,9 @@ body {
 .heading {
   font-weight: normal;
   font-size: 2.5rem;
+  justify-self: center;
+  align-self: center ;
+  text-align: center;
 }
 
 .container {
@@ -95,8 +167,15 @@ body {
   outline: none;
 }
 
+.operations-container{
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 5px;
+}
+
 .guess-btn,
-.get-number {
+.get-number, .turn-state {
   padding: 10px;
   margin-top: 40px;
   font-size: 1.5rem;
@@ -108,8 +187,18 @@ body {
   pointer-events: all;
 }
 
+.turn-state{
+  padding: 0;
+  text-align: center;
+}
+
+.turn-state.active{
+  background-color: green;
+  padding: 10px;
+}
+
 .guess-btn:disabled {
-  background-color: grey;
+  background-color: red;
   cursor: not-allowed;
 }
 
@@ -181,8 +270,85 @@ body {
   cursor: pointer;
 }
 
+.credits{
+  position: absolute;
+  bottom: 20px;
+  left: 50%;
+  transform: translate(-50%);
+  width: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 4px;
+}
+
 .credits a {
   color: black;
+}
+
+
+/* CODE FOR GUESS HISTORY */
+.guess-history{
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  align-items: center;
+  width: 100%;
+  gap: 20px;
+}
+
+.history-table{
+  display: flex;
+  flex-direction: column;
+  /* justify-content: center; */
+  align-items: flex-start;
+  /* gap: 20px; */
+  width: 70%;
+  max-width: 300px;
+
+}
+
+.history-row-heading{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.history-row{
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  align-items: center;
+
+}
+
+.history-guess{
+  border-right: 1px solid black;
+  padding-right: 20px;
+  width: 40%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  padding: 10px 0px;
+}
+
+.history-response{
+  width: 60%;
+  text-align: right;
+  padding: 10px 0px;
+}
+
+@media screen and (max-width: 820px) {
+  .history-guess{
+    width: 50%;
+  }
+  
+  .history-response{
+    width: 50%;
+ 
+  }
+  
 }
 
 @media screen and (max-width: 760px) {
