@@ -90,8 +90,8 @@ const getNewNumber = () => {
   });
   winMsg.classList.remove("active");
   guessMsg.textContent = "";
-
-  // console.log(hiddenNumber);
+  const displayedNumber = hiddenNumber.join('')
+  document.querySelector('.your-number').textContent = `Your number: ${displayedNumber}`
   return hiddenNumber;
 };
 
