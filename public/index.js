@@ -144,6 +144,12 @@ const getNewNumber = () => {
   // undisable guess-btn
   guessBtn.disabled = false
   guessMsg.textContent = "";
+
+  // clearing history fields
+historyTable1.innerHTML = "";
+historyTable2.innerHTML = "";
+
+
   const displayedNumber = hiddenNumber.join('')
   document.querySelector('.your-number').textContent = `Your number: ${displayedNumber}`
   return hiddenNumber;
@@ -177,8 +183,6 @@ function getRandomNumber(a, b, c, d) {
 // Array that stores guesses and responses
 const historyArr = []
 
-
-
 // function to submit answer
 function submitAnswer() {
   // let numbers = [Number(a.value), Number(b.value), Number(c.value), Number(d.value)];
@@ -201,7 +205,6 @@ function submitAnswer() {
     value: refineNumbers,
   };
 
-  
 
   historyArr.push({
     guess: msg.value,
@@ -227,7 +230,7 @@ function submitAnswer() {
   // your opponent is guessing..
   turnState.textContent = `${yourOpponent}'s turn`
   // send answer to your opponent
-  socket.emit("submitAnswer:post", sendTo, msg);
+    socket.emit("submitAnswer:post", sendTo, msg);
 }
 
 
@@ -320,6 +323,7 @@ function showReport(msg) {
 
   // if the player wins
   if (msg === `4 Dead, 0 Injured`) {
+    document.querySelector(".span").textContent = `You Win!`;
     winMsg.classList.add("active");
     numberInputs.forEach((input) => {
       input.classList.add("won-game");

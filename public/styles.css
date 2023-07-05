@@ -366,7 +366,7 @@ display: block;
   align-items: center;
   gap: 20px;
   opacity: 0;
-  transition: 0.3s ease;
+  /* transition: 0.3s ease; */
   margin-bottom: 70px;;
   width: 0;
   position: absolute;
@@ -376,6 +376,7 @@ display: block;
  opacity: 1;
  position: static;
   width: 100%;
+  transform: translateX(0%);
 }
 
 .history-table, .history-table-2{
@@ -386,12 +387,11 @@ display: block;
   /* gap: 20px; */
   width: 70%;
   max-width: 300px;
-
+  border: 1px solid black;
+  padding: 10px;
 }
 
 .history-table-2{
-  border: 1px solid black;
-  padding: 10px;
   max-height: 100px;
   overflow-y: scroll;
 }
