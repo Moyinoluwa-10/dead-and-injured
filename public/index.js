@@ -276,7 +276,7 @@ function confirmAnswer(msg) {
     
       })
       document.querySelector('.history-table-2').insertAdjacentHTML('beforeend', historyHtml);
-    }, 800);
+    }, 1000);
 
   // if the player loses
   if (report === `4 Dead, 0 Injured`) {
