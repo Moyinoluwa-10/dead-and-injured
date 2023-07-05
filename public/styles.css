@@ -4,6 +4,11 @@
   box-sizing: border-box;
 }
 
+.hidden{
+  pointer-events: none;
+  opacity: 0;
+}
+
 /* Chrome, Safari, Edge, Opera */
 input::-webkit-outer-spin-button,
 input::-webkit-inner-spin-button {
@@ -245,13 +250,18 @@ body {
 }
 
 .turn-state{
-  padding: 0;
+  display: none;
+  transition: 0.3s ease;
+  pointer-events: none;
   text-align: center;
+  pointer-events: all;
 }
 
 .turn-state.active{
   background-color: green;
   padding: 10px;
+display: block;
+  pointer-events: all;
 }
 
 .guess-btn:disabled {
@@ -309,6 +319,10 @@ body {
   top: 50%;
 }
 
+.win span{
+  text-align: center;
+}
+
 .close-btn {
   position: absolute;
   right: 10px;
@@ -355,12 +369,13 @@ body {
   transition: 0.3s ease;
   margin-bottom: 70px;;
   width: 0;
+  position: absolute;
 }
 
 .guess-history.active{
-  opacity: 1;
+ opacity: 1;
+ position: static;
   width: 100%;
-
 }
 
 .history-table, .history-table-2{

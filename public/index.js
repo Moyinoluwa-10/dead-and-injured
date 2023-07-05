@@ -14,6 +14,12 @@ const customInput = document.querySelector('.custom-number-input')
 const backGame = document.querySelector('.back-game')
 const customInpErr = document.querySelector('.custom-number-error')
 const customNumCont = document.querySelector('.custom-number-container')
+const historyTable1 = document.querySelector('.history-table')
+const historyTable2 = document.querySelector('.history-table-2')
+const guessHistory = document.querySelector('.guess-history')
+const turnState = document.querySelector('.turn-state')
+const lastInput = document.querySelector('.last-input')
+
 let hiddenNumber;
 let customNum
 const playerList = document.querySelector(".player-list");
@@ -102,8 +108,8 @@ socket.on("submitAnswer:get", (msg) => {
   confirmAnswer(msg);
   guessBtn.disabled = false;
   // it's your turn to guess
-  document.querySelector('.turn-state').classList.add('active')
-  document.querySelector('.turn-state').textContent = `Your turn`
+  turnState.classList.add('active')
+  turnState.textContent = `Your turn`
 });
 
 socket.on("receiveReport:get", (msg) => {
@@ -123,6 +129,7 @@ const getNewNumber = () => {
   numberInputs.forEach((input) => {
     input.value = "";
   });
+  lastInput.value = ""
   // removes active classes
   guessBtn.classList.remove("active");
   getNumBtn.classList.remove("active");
@@ -130,6 +137,12 @@ const getNewNumber = () => {
     input.classList.remove("won-game");
   });
   winMsg.classList.remove("active");
+  // remove guess history
+  guessHistory.classList.remove('active')
+  // removes turnState
+  turnState.classList.remove('active')
+  // undisable guess-btn
+  guessBtn.disabled = false
   guessMsg.textContent = "";
   const displayedNumber = hiddenNumber.join('')
   document.querySelector('.your-number').textContent = `Your number: ${displayedNumber}`
@@ -163,7 +176,7 @@ function getRandomNumber(a, b, c, d) {
 
 // Array that stores guesses and responses
 const historyArr = []
-let report2 = []
+
 
 
 // function to submit answer
@@ -192,29 +205,27 @@ function submitAnswer() {
 
   historyArr.push({
     guess: msg.value,
-    response: report2
   })
 
-    // code to append guesses and responses
-    document.querySelector('.guess-history').classList.add('active')
+    // code to append guesses and responses of player
+    guessHistory.classList.add('active')
     document.querySelector('.opponent-guess').textContent =`${yourOpponent}'s guesses`
-    setTimeout(() => {
+
       let historyHtml
       historyArr.forEach((el)=>{
          historyHtml = ` <div class="history-row">
         <div class="history-guess">${el.guess.join('')}</div>
-        <div class="history-response">${el.response[0]}</div>
+        <div class="history-response history-response-1"></div>
       </div>`;
     
       })
-      document.querySelector('.history-table').insertAdjacentHTML('beforeend', historyHtml);
-    }, 800);
+      historyTable1.insertAdjacentHTML('beforeend', historyHtml);
     
   guessBtn.disabled = true;
 
-  document.querySelector('.turn-state').classList.add('active')
+  turnState.classList.add('active')
   // your opponent is guessing..
-  document.querySelector('.turn-state').textContent = `${yourOpponent}'s turn`
+  turnState.textContent = `${yourOpponent}'s turn`
   // send answer to your opponent
   socket.emit("submitAnswer:post", sendTo, msg);
 }
@@ -265,8 +276,6 @@ function confirmAnswer(msg) {
   })
 
     // code to append guesses and responses of opponent
-    
-    setTimeout(() => {
       let historyHtml
       historyArr2.forEach((el)=>{
          historyHtml = ` <div class="history-row">
@@ -275,8 +284,8 @@ function confirmAnswer(msg) {
       </div>`;
     
       })
-      document.querySelector('.history-table-2').insertAdjacentHTML('beforeend', historyHtml);
-    }, 1000);
+      historyTable2.insertAdjacentHTML('beforeend', historyHtml);
+
 
   // if the player loses
   if (report === `4 Dead, 0 Injured`) {
@@ -286,10 +295,13 @@ function confirmAnswer(msg) {
       input.classList.add("won-game");
     });
 
+  // remove turnstate
+    turnState.classList.remove('active')
+
     setTimeout(() => {
       guessBtn.classList.add("active");
       getNumBtn.classList.add("active");
-    }, 600);
+    }, 100);
   }
 
   closeBtn.addEventListener("click", () => {
@@ -302,8 +314,9 @@ function showReport(msg) {
   guessMsg.classList.add("active");
   guessMsg.textContent = msg;
 
-  report2.shift()
-  report2.push(msg)
+  // showing response in player table
+  const histResponsArr = Array.from(document.querySelectorAll('.history-response-1'))
+  histResponsArr.slice(-1)[0].innerText = msg
 
   // if the player wins
   if (msg === `4 Dead, 0 Injured`) {
@@ -312,12 +325,16 @@ function showReport(msg) {
       input.classList.add("won-game");
     });
 
+    // remove turnstate
+    turnState.classList.remove('active')
+
     setTimeout(() => {
       guessBtn.classList.add("active");
       getNumBtn.classList.add("active");
-    }, 600);
+    }, 100);
   }
 
+  // close win or lose notification
   closeBtn.addEventListener("click", () => {
     winMsg.classList.remove("active");
   });
@@ -341,8 +358,6 @@ customInput.oninput = () =>{
     customInput.value = customInput.value.slice(0, customInput.maxLength);
   }
 }
-
-const lastInput = document.querySelector('.last-input')
 
 lastInput.oninput = () =>{
   if (lastInput.value.length > lastInput.maxLength) {
