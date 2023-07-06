@@ -232,6 +232,14 @@ function submitAnswer() {
     })
     .filter((curr) => curr !== undefined);
 
+  if (refineNumbers.length < 4 || refineNumbers.length === 0) {
+    alert("Insufficient Numbers!, choose another number");
+    return;
+  } else if (repeatingNums(refineNumbers)) {
+    alert("Repeating Numbers detected!, choose another number");
+    return;
+  }
+
   const msg = {
     userId: socket.id,
     username,
