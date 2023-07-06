@@ -249,25 +249,42 @@ function submitAnswer() {
 const historyArr2 =[]
 // function to confirm answer
 function confirmAnswer(msg) {
-  let deadArrComp = [];
-  let injuredArrComp = [];
-
-  hiddenNumber.forEach((i, idx) => {
-    let deadArr = msg.value.filter((el, index) => {
+  // code to get how many numbers are dead
+  const deadNum = hiddenNumber.flatMap((i, idx)=>{
+    return msg.value.filter((el, index) => {
       return i === el && idx === index;
     });
-    let injuredArr = msg.value.filter((el, index) => {
+
+  }).length
+  
+  // code to get how many numbers are injured
+  const injuredNum = hiddenNumber.flatMap((i, idx)=>{
+    return msg.value.filter((el, index) => {
       return i === el && idx !== index;
     });
+ 
+  }).length
 
-    deadArrComp.push(deadArr);
-    injuredArrComp.push(injuredArr);
-  });
+  // OLD CODE TO GET NUMBER OF DEAD AND INJURED VALUES
+  // let deadArrComp = [];
+  // let injuredArrComp = [];
 
-  let deadNum = deadArrComp.flat().length;
-  let injuredNum = injuredArrComp.flat().length;
+  // hiddenNumber.forEach((i, idx) => {
+  //   let deadArr = msg.value.filter((el, index) => {
+  //     return i === el && idx === index;
+  //   });
+  //   let injuredArr = msg.value.filter((el, index) => {
+  //     return i === el && idx !== index;
+  //   });
 
-  console.log(msg.value);
+  //   deadArrComp.push(deadArr);
+  //   injuredArrComp.push(injuredArr);
+  // });
+
+  // let deadNum = deadArrComp.flat().length;
+  // let injuredNum = injuredArrComp.flat().length;
+
+  // console.log(msg.value);
 
   let report;
 
