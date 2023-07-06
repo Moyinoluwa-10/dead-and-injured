@@ -130,16 +130,16 @@ socket.on("receiveReport:get", (msg) => {
 });
 
 socket.on("sendRequest:get", (msg) => {
-  console.log("sendRequest", "request sent");
+  // console.log("sendRequest", "request sent");
   const response = confirm(`${msg.username} wants to play with you`);
   console.log(response);
   socket.emit("sendRequestResponse:post", msg.userId, response, socket.id);
 });
 
 socket.on("sendRequestResponse:get", (msg, userId) => {
-  console.log("sendRequestResponse", "response received");
-  // console.log(id);
+  // console.log("sendRequestResponse", "response received");
   msg && selectPlayer(userId);
+  !msg && alert("Player denied request");
 });
 
 const getNewNumber = () => {
