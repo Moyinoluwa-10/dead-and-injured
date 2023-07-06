@@ -20,6 +20,7 @@ const guessHistory = document.querySelector(".guess-history");
 const turnState = document.querySelector(".turn-state");
 const lastInput = document.querySelector(".last-input");
 
+let el_await // span element that tells user to wait
 let hiddenNumber;
 let customNum;
 const playerList = document.querySelector(".player-list");
@@ -132,6 +133,9 @@ socket.on("sendRequestResponse:get", (msg, userId) => {
   // console.log("sendRequestResponse", "response received");
   msg && selectPlayer(userId);
   !msg && alert("Player denied request");
+  if(msg){
+    el_await.innerText = ""
+  }
 });
 
 const getNewNumber = () => {
@@ -443,6 +447,14 @@ function sendRequest(e) {
     username,
   };
   sendTo = player.id;
+
+  el_await = document.createElement("span");
+  el_await.className = "player-tag"
+  el_await.innerText = "waiting response";
+  player.appendChild(el_await);
+  if(playerObj.playing){
+    
+  }
   socket.emit("sendRequest:post", sendTo, msg);
 }
 
