@@ -73,23 +73,6 @@ socket.on("connect", () => {
   playerObj.id = socket.id;
 
   // code to enter/input custom
-  backGame.addEventListener("click", () => {
-    customNum = customInput.value;
-    const customNumArr = customNum.split("");
-
-    if (customNumArr.length < 4) {
-      customInpErr.textContent = `Insufficient Numbers!`;
-    } else if (repeatingNums(customNumArr)) {
-      customInpErr.textContent = `Repeating Numbers detected!`;
-    } else {
-      customNumCont.classList.remove("active");
-    }
-    value = customNumArr;
-    document.querySelector(
-      ".your-number"
-    ).textContent = `Your number: ${customNumArr.join("")}`;
-    players.push({ id: socket.id, username, value });
-  });
 
   players.push({ id: socket.id, username, value });
   // console.log(players);
@@ -286,8 +269,10 @@ function submitAnswer() {
 }
 
 const historyArr2 = [];
+
 // function to confirm answer
 function confirmAnswer(msg) {
+  console.log(hiddenNumber);
   // code to get how many numbers are dead
   const deadNum = hiddenNumber.flatMap((i, idx) => {
     return msg.value.filter((el, index) => {
@@ -502,4 +487,24 @@ closeBtn_players.addEventListener("click", () => {
 const chooseNum = document.querySelector(".choose-number");
 chooseNum.addEventListener("click", () => {
   customNumCont.classList.add("active");
+});
+
+backGame.addEventListener("click", () => {
+  customNum = customInput.value;
+  const customNumArr = customNum.split("");
+  const value = [];
+  customNumArr.forEach((i) => value.push(Number(i)));
+
+  if (customNumArr.length < 4) {
+    customInpErr.textContent = `Insufficient Numbers!`;
+  } else if (repeatingNums(customNumArr)) {
+    customInpErr.textContent = `Repeating Numbers detected!`;
+  } else {
+    customNumCont.classList.remove("active");
+  }
+  hiddenNumber = value;
+  document.querySelector(
+    ".your-number"
+  ).textContent = `Your number: ${customNumArr.join("")}`;
+  // players.push({ id: socket.id, username, value });
 });
