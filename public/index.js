@@ -272,6 +272,7 @@ function submitAnswer() {
   }
   // send answer to your opponent
   socket.emit("submitAnswer:post", sendTo, msg);
+  console.log("answer submitted");
 }
 
 const historyArr2 = [];
@@ -476,6 +477,7 @@ function selectPlayer(userId) {
     const el = document.createElement("span");
     el.innerText = "playing";
     player.appendChild(el);
+    sendTo = userId;
     playerObj.playing = true;
   }
   console.log(playerObj);
