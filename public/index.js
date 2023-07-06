@@ -133,6 +133,7 @@ socket.on("sendRequest:get", (msg) => {
   // console.log("sendRequest", "request sent");
   const response = confirm(`${msg.username} wants to play with you`);
   console.log(response);
+  response && selectPlayer(msg.userId);
   socket.emit("sendRequestResponse:post", msg.userId, response, socket.id);
 });
 
