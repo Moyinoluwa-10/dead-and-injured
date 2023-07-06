@@ -25,7 +25,9 @@ let customNum;
 const playerList = document.querySelector(".player-list");
 let yourOpponent;
 
-let oneId;
+const playerObj = {
+  playing: false,
+};
 
 // This function checks for repeating numbers
 const repeatingNums = (Num) => {
@@ -66,7 +68,7 @@ socket.on("connect", () => {
   // create an 4 digit number for the user
   let value = getNewNumber();
   console.log(socket.id);
-  oneId = socket.id;
+  playerObj.id = socket.id;
 
   // code to enter/input custom
   backGame.addEventListener("click", () => {
@@ -133,7 +135,11 @@ socket.on("sendRequest:get", (msg) => {
   // console.log("sendRequest", "request sent");
   const response = confirm(`${msg.username} wants to play with you`);
   console.log(response);
-  response && selectPlayer(msg.userId);
+  if (response) {
+    console.log("testing");
+    selectPlayer(msg.userId);
+    playerObj.playing = true;
+  }
   socket.emit("sendRequestResponse:post", msg.userId, response, socket.id);
 });
 
@@ -438,25 +444,23 @@ function createNewPlayer(data) {
 }
 
 function sendRequest(e) {
+  if (playerObj.playing) {
+    alert("Please complete the current game");
+    return;
+  }
   const player = e.currentTarget;
   const msg = {
     userId: socket.id,
     username,
   };
   sendTo = player.id;
-  console.log(document.querySelector(`#${player.id}`));
   socket.emit("sendRequest:post", sendTo, msg);
-  console.log("request sent");
 }
 
 // function to select a player
 function selectPlayer(userId) {
   // get selected player
-  console.log("selectPlayer", userId);
-  console.log(document.querySelector(`#${userId}`));
   const player = document.querySelector(`#${userId}`);
-  console.log(player);
-  // const player = e.currentTarget;
   yourOpponent = player.innerText;
   document.querySelector(
     ".opponent-username"
@@ -469,7 +473,12 @@ function selectPlayer(userId) {
 
     // Highlight player clicked
     player.classList.add("player--selected");
+    const el = document.createElement("span");
+    el.innerText = "playing";
+    player.appendChild(el);
+    playerObj.playing = true;
   }
+  console.log(playerObj);
 }
 
 // CODE FOR HAMBURGER MENU OF PLAYERS
