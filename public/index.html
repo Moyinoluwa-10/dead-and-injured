@@ -5,11 +5,11 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Dead and Injured</title>
     <link rel="stylesheet" href="styles.css" />
-        <!-- FONT-AWESOME-KIT-LINK!! -->
-        <script
-        src="https://kit.fontawesome.com/20fa27540b.js"
-        crossorigin="anonymous"
-      ></script>
+    <!-- FONT-AWESOME-KIT-LINK!! -->
+    <script
+      src="https://kit.fontawesome.com/20fa27540b.js"
+      crossorigin="anonymous"
+    ></script>
   </head>
   <body>
     <div class="wrapper">
@@ -19,7 +19,7 @@
 
       <div class="custom-number-container">
         <h2>Please type in your number</h2>
-        <input type='number' class="custom-number-input" maxlength="4">
+        <input type="number" class="custom-number-input" maxlength="4" />
 
         <p class="custom-number-error"></p>
 
@@ -35,14 +35,12 @@
 
         <div class="user-container">
           <div class="right">
-            <h2 class="your-username">
-            </h2>
+            <h2 class="your-username"></h2>
 
-            <h2 class="opponent-username">
-            </h2>
+            <h2 class="opponent-username"></h2>
 
             <h2 class="your-number"></h2>
-            
+
             <div class="container">
               <div class="box">
                 <input
@@ -82,28 +80,30 @@
               </div>
               <!-- <div class="box"><input type="number" name="answer" id="box-5" maxlength="1"></div> -->
             </div>
-    
+
             <div class="operations-container">
-            <button class="guess-btn" onclick="submitAnswer()">Guess!</button><br />
-            <button class="get-number">Get New Number</button><br />
-            <div class="turn-state"></div>
+              <button class="guess-btn" onclick="submitAnswer()">Guess!</button
+              ><br />
+              <button class="get-number">Get New Number</button><br />
+              <div class="turn-state"></div>
             </div>
-    
+
             <p class="alert"></p>
-    
+
             <div class="win">
-              <span class="span">4 Dead! <br> YOU WIN!</span>
-    
+              <span class="span"
+                >4 Dead! <br />
+                YOU WIN!</span
+              >
+
               <div class="close-btn">✕</div>
             </div>
-         
           </div>
-  
+
           <div class="guess-history">
             <h3>Your guesses...</h3>
-  
+
             <div class="history-table">
-     
               <div class="history-row-heading">
                 <h3>Guesses</h3>
                 <h3>Responses</h3>
@@ -113,19 +113,17 @@
                 <div class="history-guess">1234</div>
                 <div class="history-response">2 dead, 1 injured</div>
               </div> -->
-  
-              </div>
-          
-              <h3 class="opponent-guess"></h3>
-            
-              <div class="history-table-2">
-                <div class="history-row-heading">
-                  <h3>Guesses</h3>
-                  <h3>Responses</h3>
-                </div>
             </div>
-        </div>
 
+            <h3 class="opponent-guess"></h3>
+
+            <div class="history-table-2">
+              <div class="history-row-heading">
+                <h3>Guesses</h3>
+                <h3>Responses</h3>
+              </div>
+            </div>
+          </div>
         </div>
 
         <p class="credits">
@@ -134,11 +132,10 @@
           <a href="https://twitter.com/rotii_mii">Moyinoluwa</a>
         </p>
       </div>
-     
     </div>
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
     <script src="index.js"></script>
-    <script src="server.js"></script>
+    <!-- <script src="server.js"></script> -->
   </body>
 </html>

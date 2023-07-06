@@ -29,6 +29,8 @@ const playerObj = {
   playing: false,
 };
 
+// import { repeatingNums } from "./functions.js";
+
 // This function checks for repeating numbers
 const repeatingNums = (Num) => {
   if (
@@ -323,14 +325,7 @@ function confirmAnswer(msg) {
 
   let report;
 
-  //  checking if there a number is recurring in the input
-  if (msg.value.length < 4 || msg.value.length === 0) {
-    report = `Insufficient Numbers!`;
-  } else if (repeatingNums(msg.value)) {
-    report = `Repeating Numbers detected!`;
-  } else {
-    report = `${deadNum} Dead, ${injuredNum} Injured`;
-  }
+  report = `${deadNum} Dead, ${injuredNum} Injured`;
 
   // send the result of the opponents answer back to him
   socket.emit("receiveReport:post", msg.userId, report);
@@ -410,7 +405,7 @@ getNumBtn.addEventListener("click", getNewNumber);
 
 // code to check for max length
 document.querySelectorAll(".number-input").forEach((input) => {
-  console.log(input.maxLength);
+  // console.log(input.maxLength);
 
   input.oninput = () => {
     if (input.value.length > input.maxLength) {
