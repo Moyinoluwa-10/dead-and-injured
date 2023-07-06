@@ -486,6 +486,10 @@ closeBtn_players.addEventListener("click", () => {
 // CODE TO SHOW CUSTOM INPUT FIELD
 const chooseNum = document.querySelector(".choose-number");
 chooseNum.addEventListener("click", () => {
+  if (playerObj.playing) {
+    alert("You can't change numbers during a game");
+    return;
+  }
   customNumCont.classList.add("active");
 });
 
