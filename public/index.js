@@ -25,6 +25,8 @@ let customNum;
 const playerList = document.querySelector(".player-list");
 let yourOpponent;
 
+let oneId;
+
 // This function checks for repeating numbers
 const repeatingNums = (Num) => {
   if (
@@ -43,6 +45,7 @@ const repeatingNums = (Num) => {
 
 const players = [];
 const socket = io();
+
 let username = sessionStorage.getItem("username");
 if (!username) {
   username = prompt("Enter a username: ");
@@ -62,6 +65,8 @@ socket.on("connect", () => {
   socket.emit("user:enter", { id: socket.id, username });
   // create an 4 digit number for the user
   let value = getNewNumber();
+  console.log(socket.id);
+  oneId = socket.id;
 
   // code to enter/input custom
   backGame.addEventListener("click", () => {
@@ -122,6 +127,19 @@ socket.on("submitAnswer:get", (msg) => {
 socket.on("receiveReport:get", (msg) => {
   // console.log("receiveReport", msg);
   showReport(msg);
+});
+
+socket.on("sendRequest:get", (msg) => {
+  console.log("sendRequest", "request sent");
+  const response = confirm(`${msg.username} wants to play with you`);
+  console.log(response);
+  socket.emit("sendRequestResponse:post", msg.userId, response, socket.id);
+});
+
+socket.on("sendRequestResponse:get", (msg, userId) => {
+  console.log("sendRequestResponse", "response received");
+  // console.log(id);
+  msg && selectPlayer(userId);
 });
 
 const getNewNumber = () => {
@@ -407,20 +425,38 @@ function createNewPlayer(data) {
   player.innerText = data.username;
 
   // add click event handler
-  player.addEventListener("click", selectPlayer);
-  player.addEventListener("click", () => {
-    playerList.classList.add("hidden");
-  });
+  player.addEventListener("click", sendRequest);
+  // player.addEventListener("click", () => {
+  //   // console.log("hello");
+  //   // selectPlayer(e);
+  //   // playerList.classList.add("hidden");
+  // });
 
   // update player list with new player
   playerList.appendChild(player);
 }
 
-// function to select a player
-function selectPlayer(e) {
-  // get selected player
+function sendRequest(e) {
   const player = e.currentTarget;
-  yourOpponent = e.currentTarget.innerText;
+  const msg = {
+    userId: socket.id,
+    username,
+  };
+  sendTo = player.id;
+  console.log(document.querySelector(`#${player.id}`));
+  socket.emit("sendRequest:post", sendTo, msg);
+  console.log("request sent");
+}
+
+// function to select a player
+function selectPlayer(userId) {
+  // get selected player
+  console.log("selectPlayer", userId);
+  console.log(document.querySelector(`#${userId}`));
+  const player = document.querySelector(`#${userId}`);
+  console.log(player);
+  // const player = e.currentTarget;
+  yourOpponent = player.innerText;
   document.querySelector(
     ".opponent-username"
   ).textContent = `Opponent: ${yourOpponent}`;
@@ -432,8 +468,6 @@ function selectPlayer(e) {
 
     // Highlight player clicked
     player.classList.add("player--selected");
-
-    sendTo = player.id;
   }
 }
 

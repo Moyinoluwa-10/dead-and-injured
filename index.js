@@ -44,7 +44,7 @@ io.on("connection", async (socket) => {
     socket.username = data.username;
     socket.id = data.id;
     socket.broadcast.emit("user:enter", data);
-    console.log("user:enter", data);
+    // console.log("user:enter", data);
   });
 
   socket.on("disconnect", (reason) => {
@@ -59,6 +59,18 @@ io.on("connection", async (socket) => {
   socket.on("receiveReport:post", (id, msg) => {
     socket.to(id).emit("receiveReport:get", msg);
   });
+
+  socket.on("sendRequest:post", (id, msg) => {
+    socket.to(id).emit("sendRequest:get", msg);
+  });
+
+  socket.on("sendRequestResponse:post", (id, msg, userId) => {
+    socket.to(id).emit("sendRequestResponse:get", msg, userId);
+  });
+
+  // socket.on("sendRequest:post", (id, msg) => {
+  //   socket.to(id).emit("sendRequest:get", msg);
+  // });
 });
 
 server.listen(PORT, () => {
