@@ -136,6 +136,9 @@ socket.on("sendRequestResponse:get", (msg, userId) => {
   if(msg){
     el_await.innerText = ""
   }
+  if(!msg){
+    el_await.innerText = ""
+  }
 });
 
 const getNewNumber = () => {
