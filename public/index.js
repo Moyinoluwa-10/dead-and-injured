@@ -112,6 +112,7 @@ socket.on("submitAnswer:get", (msg) => {
   turnState.textContent = `Your turn`
   if(!guessBtn.disabled){
     guessBtn.textContent = "Guess!"
+
   }
 });
 
@@ -235,6 +236,10 @@ function submitAnswer() {
   // change content of button depending on state
   if(guessBtn.disabled){
     guessBtn.textContent = "Wait!"
+    // clears input fields when you have guessed
+    document.querySelectorAll('input').forEach((input)=>{
+      input.value = ""
+    })
   }
   // send answer to your opponent
     socket.emit("submitAnswer:post", sendTo, msg);
