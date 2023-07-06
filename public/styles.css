@@ -4,7 +4,7 @@
   box-sizing: border-box;
 }
 
-.hidden{
+.hidden {
   pointer-events: none;
   opacity: 0;
 }
@@ -33,7 +33,7 @@ body {
   position: relative;
 }
 
-.see-players{
+.see-players {
   position: absolute;
   z-index: 2;
   top: 10px;
@@ -43,7 +43,7 @@ body {
   text-align: center;
 }
 
-.choose-number{
+.choose-number {
   position: absolute;
   z-index: 1;
   top: 10px;
@@ -54,11 +54,11 @@ body {
   /* pointer-events: none; */
 }
 
-.custom-number-container{
+.custom-number-container {
   position: fixed;
   width: 100%;
   height: 100%;
-  background-color: rgba(0,0,0,0.8);
+  background-color: rgba(0, 0, 0, 0.8);
   top: 0;
   left: 0;
   z-index: 3;
@@ -72,16 +72,16 @@ body {
   transition: 0.3s ease;
 }
 
-.custom-number-container.active{
+.custom-number-container.active {
   opacity: 1;
   pointer-events: all;
 }
 
-.custom-number-container h2{
+.custom-number-container h2 {
   color: white;
-} 
+}
 
-.custom-number-container p{
+.custom-number-container p {
   color: white;
   text-decoration: underline;
   cursor: pointer;
@@ -113,16 +113,16 @@ body {
   pointer-events: all;
 }
 
-.player-list > div:nth-child(2){
+.player-list > div:nth-child(2) {
   margin-top: 10px;
 }
 
-.player-list.hidden{
+.player-list.hidden {
   opacity: 0;
   pointer-events: none;
 }
 
-.close-btn--players{
+.close-btn--players {
   position: absolute;
   right: 10px;
   top: 10px;
@@ -140,7 +140,7 @@ body {
   cursor: pointer;
 }
 
-.game-container{
+.game-container {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -150,7 +150,7 @@ body {
   min-height: 100vh;
 }
 
-.user-container{
+.user-container {
   display: flex;
   gap: 30px;
   width: 100%;
@@ -159,7 +159,7 @@ body {
 }
 
 @media screen and (max-width: 820px) {
-  .user-container{
+  .user-container {
     flex-direction: column;
   }
 }
@@ -190,7 +190,7 @@ body {
   font-weight: normal;
   font-size: 2.5rem;
   justify-self: center;
-  align-self: center ;
+  align-self: center;
   text-align: center;
 }
 
@@ -229,7 +229,7 @@ body {
   outline: none;
 }
 
-.operations-container{
+.operations-container {
   display: flex;
   justify-content: center;
   align-items: center;
@@ -237,7 +237,8 @@ body {
 }
 
 .guess-btn,
-.get-number, .turn-state {
+.get-number,
+.turn-state {
   padding: 10px;
   margin-top: 40px;
   font-size: 1.5rem;
@@ -249,11 +250,11 @@ body {
   pointer-events: all;
 }
 
-.guess-btn{
+.guess-btn {
   background-color: green;
 }
 
-.turn-state{
+.turn-state {
   display: none;
   transition: 0.3s ease;
   pointer-events: none;
@@ -261,10 +262,10 @@ body {
   pointer-events: all;
 }
 
-.turn-state.active{
+.turn-state.active {
   background-color: black;
   padding: 10px;
-display: block;
+  display: block;
   pointer-events: all;
 }
 
@@ -315,6 +316,7 @@ display: block;
   opacity: 0;
   pointer-events: none;
   transition: 0.6s cubic-bezier(0.68, -0.6, 0.32, 1.6);
+  z-index: 10;
 }
 
 .win.active {
@@ -323,7 +325,7 @@ display: block;
   top: 50%;
 }
 
-.win span{
+.win span {
   text-align: center;
 }
 
@@ -343,9 +345,10 @@ display: block;
   justify-content: center;
   align-items: center;
   cursor: pointer;
+  z-index: 15;
 }
 
-.credits{
+.credits {
   position: absolute;
   bottom: 20px;
   left: 50%;
@@ -361,9 +364,8 @@ display: block;
   color: black;
 }
 
-
 /* CODE FOR GUESS HISTORY */
-.guess-history{
+.guess-history {
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
@@ -371,19 +373,20 @@ display: block;
   gap: 20px;
   opacity: 0;
   /* transition: 0.3s ease; */
-  margin-bottom: 70px;;
+  margin-bottom: 70px;
   width: 0;
   position: absolute;
 }
 
-.guess-history.active{
- opacity: 1;
- position: static;
+.guess-history.active {
+  opacity: 1;
+  position: static;
   width: 100%;
   transform: translateX(0%);
 }
 
-.history-table, .history-table-2{
+.history-table,
+.history-table-2 {
   display: flex;
   flex-direction: column;
   /* justify-content: center; */
@@ -395,31 +398,30 @@ display: block;
   padding: 10px;
 }
 
-.history-table-2{
+.history-table-2 {
   max-height: 100px;
   overflow-y: scroll;
 }
 
-.opponent-guess{
+.opponent-guess {
   margin-top: 20px;
 }
 
-.history-row-heading{
+.history-row-heading {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
 }
 
-.history-row{
+.history-row {
   display: flex;
   width: 100%;
   justify-content: space-between;
   align-items: center;
-
 }
 
-.history-guess{
+.history-guess {
   border-right: 1px solid black;
   padding-right: 20px;
   width: 40%;
@@ -429,22 +431,20 @@ display: block;
   padding: 10px 0px;
 }
 
-.history-response{
+.history-response {
   width: 60%;
   text-align: right;
   padding: 10px 0px;
 }
 
 @media screen and (max-width: 820px) {
-  .history-guess{
+  .history-guess {
     width: 50%;
   }
-  
-  .history-response{
+
+  .history-response {
     width: 50%;
- 
   }
-  
 }
 
 @media screen and (max-width: 760px) {

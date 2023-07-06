@@ -10,34 +10,36 @@ const closeBtn = document.querySelector(".close-btn");
 const guessBtn = document.querySelector(".guess-btn");
 const getNumBtn = document.querySelector(".get-number");
 const numberInputs = document.querySelectorAll(".number-input");
-const customInput = document.querySelector('.custom-number-input')
-const backGame = document.querySelector('.back-game')
-const customInpErr = document.querySelector('.custom-number-error')
-const customNumCont = document.querySelector('.custom-number-container')
-const historyTable1 = document.querySelector('.history-table')
-const historyTable2 = document.querySelector('.history-table-2')
-const guessHistory = document.querySelector('.guess-history')
-const turnState = document.querySelector('.turn-state')
-const lastInput = document.querySelector('.last-input')
+const customInput = document.querySelector(".custom-number-input");
+const backGame = document.querySelector(".back-game");
+const customInpErr = document.querySelector(".custom-number-error");
+const customNumCont = document.querySelector(".custom-number-container");
+const historyTable1 = document.querySelector(".history-table");
+const historyTable2 = document.querySelector(".history-table-2");
+const guessHistory = document.querySelector(".guess-history");
+const turnState = document.querySelector(".turn-state");
+const lastInput = document.querySelector(".last-input");
 
 let hiddenNumber;
-let customNum
+let customNum;
 const playerList = document.querySelector(".player-list");
-let yourOpponent
+let yourOpponent;
 
 // This function checks for repeating numbers
-const repeatingNums = (Num) =>{
-  if(Num[0] === Num[1] ||
+const repeatingNums = (Num) => {
+  if (
+    Num[0] === Num[1] ||
     Num[0] === Num[2] ||
     Num[0] === Num[3] ||
     Num[1] === Num[2] ||
     Num[1] === Num[3] ||
-    Num[2] === Num[3]) {
-      return true
-    } else {
-      return false
-    }
-}
+    Num[2] === Num[3]
+  ) {
+    return true;
+  } else {
+    return false;
+  }
+};
 
 const players = [];
 const socket = io();
@@ -45,14 +47,15 @@ let username = sessionStorage.getItem("username");
 if (!username) {
   username = prompt("Enter a username: ");
   sessionStorage.setItem("username", username);
-} 
-while(username === null || username === ""){
-  username = prompt("Whats your username")
+}
+while (username === null || username === "") {
+  username = prompt("Whats your username");
+  sessionStorage.setItem("username", username);
 }
 let sendTo;
 
 // shows player his/her username
-document.querySelector('.your-username').textContent = `Username: ${username}`
+document.querySelector(".your-username").textContent = `Username: ${username}`;
 
 socket.on("connect", () => {
   console.log("connected to server");
@@ -60,23 +63,24 @@ socket.on("connect", () => {
   // create an 4 digit number for the user
   let value = getNewNumber();
 
-  // code to enter/input custom 
-  backGame.addEventListener('click', ()=>{
-    customNum = customInput.value
-    const customNumArr = customNum.split('')  
+  // code to enter/input custom
+  backGame.addEventListener("click", () => {
+    customNum = customInput.value;
+    const customNumArr = customNum.split("");
 
-    if (customNumArr.length < 4 ) {
+    if (customNumArr.length < 4) {
       customInpErr.textContent = `Insufficient Numbers!`;
     } else if (repeatingNums(customNumArr)) {
       customInpErr.textContent = `Repeating Numbers detected!`;
-    } else{
-      customNumCont.classList.remove('active')
+    } else {
+      customNumCont.classList.remove("active");
     }
-    value = customNumArr
-    document.querySelector('.your-number').textContent = `Your number: ${customNumArr.join('')}`
-  players.push({ id: socket.id, username, value });
-
-  })
+    value = customNumArr;
+    document.querySelector(
+      ".your-number"
+    ).textContent = `Your number: ${customNumArr.join("")}`;
+    players.push({ id: socket.id, username, value });
+  });
 
   players.push({ id: socket.id, username, value });
   // console.log(players);
@@ -108,10 +112,10 @@ socket.on("submitAnswer:get", (msg) => {
   confirmAnswer(msg);
   guessBtn.disabled = false;
   // it's your turn to guess
-  turnState.classList.add('active')
-  turnState.textContent = `Your turn`
-  if(!guessBtn.disabled){
-    guessBtn.textContent = "Guess!"
+  turnState.classList.add("active");
+  turnState.textContent = `Your turn`;
+  if (!guessBtn.disabled) {
+    guessBtn.textContent = "Guess!";
   }
 });
 
@@ -132,7 +136,7 @@ const getNewNumber = () => {
   numberInputs.forEach((input) => {
     input.value = "";
   });
-  lastInput.value = ""
+  lastInput.value = "";
   // removes active classes
   guessBtn.classList.remove("active");
   getNumBtn.classList.remove("active");
@@ -141,20 +145,21 @@ const getNewNumber = () => {
   });
   winMsg.classList.remove("active");
   // remove guess history
-  guessHistory.classList.remove('active')
+  guessHistory.classList.remove("active");
   // removes turnState
-  turnState.classList.remove('active')
+  turnState.classList.remove("active");
   // undisable guess-btn
-  guessBtn.disabled = false
+  guessBtn.disabled = false;
   guessMsg.textContent = "";
 
   // clearing history fields
-historyTable1.innerHTML = "";
-historyTable2.innerHTML = "";
+  historyTable1.innerHTML = "";
+  historyTable2.innerHTML = "";
 
-
-  const displayedNumber = hiddenNumber.join('')
-  document.querySelector('.your-number').textContent = `Your number: ${displayedNumber}`
+  const displayedNumber = hiddenNumber.join("");
+  document.querySelector(
+    ".your-number"
+  ).textContent = `Your number: ${displayedNumber}`;
   return hiddenNumber;
 };
 
@@ -184,7 +189,7 @@ function getRandomNumber(a, b, c, d) {
 }
 
 // Array that stores guesses and responses
-const historyArr = []
+const historyArr = [];
 
 // function to submit answer
 function submitAnswer() {
@@ -208,40 +213,39 @@ function submitAnswer() {
     value: refineNumbers,
   };
 
-
   historyArr.push({
     guess: msg.value,
-  })
+  });
 
-    // code to append guesses and responses of player
-    guessHistory.classList.add('active')
-    document.querySelector('.opponent-guess').textContent =`${yourOpponent}'s guesses`
+  // code to append guesses and responses of player
+  guessHistory.classList.add("active");
+  document.querySelector(
+    ".opponent-guess"
+  ).textContent = `${yourOpponent}'s guesses`;
 
-      let historyHtml
-      historyArr.forEach((el)=>{
-         historyHtml = ` <div class="history-row">
-        <div class="history-guess">${el.guess.join('')}</div>
+  let historyHtml;
+  historyArr.forEach((el) => {
+    historyHtml = ` <div class="history-row">
+        <div class="history-guess">${el.guess.join("")}</div>
         <div class="history-response history-response-1"></div>
       </div>`;
-    
-      })
-      historyTable1.insertAdjacentHTML('beforeend', historyHtml);
-    
+  });
+  historyTable1.insertAdjacentHTML("beforeend", historyHtml);
+
   guessBtn.disabled = true;
 
-  turnState.classList.add('active')
+  turnState.classList.add("active");
   // your opponent is guessing..
-  turnState.textContent = `${yourOpponent}'s turn`
+  turnState.textContent = `${yourOpponent}'s turn`;
   // change content of button depending on state
-  if(guessBtn.disabled){
-    guessBtn.textContent = "Wait!"
+  if (guessBtn.disabled) {
+    guessBtn.textContent = "Wait!";
   }
   // send answer to your opponent
-    socket.emit("submitAnswer:post", sendTo, msg);
+  socket.emit("submitAnswer:post", sendTo, msg);
 }
 
-
-const historyArr2 =[]
+const historyArr2 = [];
 // function to confirm answer
 function confirmAnswer(msg) {
   let deadArrComp = [];
@@ -269,9 +273,7 @@ function confirmAnswer(msg) {
   //  checking if there a number is recurring in the input
   if (msg.value.length < 4 || msg.value.length === 0) {
     report = `Insufficient Numbers!`;
-  } else if (
-    repeatingNums(msg.value)
-  ) {
+  } else if (repeatingNums(msg.value)) {
     report = `Repeating Numbers detected!`;
   } else {
     report = `${deadNum} Dead, ${injuredNum} Injured`;
@@ -282,20 +284,18 @@ function confirmAnswer(msg) {
 
   historyArr2.push({
     guess: msg.value,
-    response: report
-  })
+    response: report,
+  });
 
-    // code to append guesses and responses of opponent
-      let historyHtml
-      historyArr2.forEach((el)=>{
-         historyHtml = ` <div class="history-row">
-        <div class="history-guess">${el.guess.join('')}</div>
+  // code to append guesses and responses of opponent
+  let historyHtml;
+  historyArr2.forEach((el) => {
+    historyHtml = ` <div class="history-row">
+        <div class="history-guess">${el.guess.join("")}</div>
         <div class="history-response">${report}</div>
       </div>`;
-    
-      })
-      historyTable2.insertAdjacentHTML('beforeend', historyHtml);
-
+  });
+  historyTable2.insertAdjacentHTML("beforeend", historyHtml);
 
   // if the player loses
   if (report === `4 Dead, 0 Injured`) {
@@ -305,8 +305,8 @@ function confirmAnswer(msg) {
       input.classList.add("won-game");
     });
 
-  // remove turnstate
-    turnState.classList.remove('active')
+    // remove turnstate
+    turnState.classList.remove("active");
 
     setTimeout(() => {
       guessBtn.classList.add("active");
@@ -325,8 +325,10 @@ function showReport(msg) {
   guessMsg.textContent = msg;
 
   // showing response in player table
-  const histResponsArr = Array.from(document.querySelectorAll('.history-response-1'))
-  histResponsArr.slice(-1)[0].innerText = msg
+  const histResponsArr = Array.from(
+    document.querySelectorAll(".history-response-1")
+  );
+  histResponsArr.slice(-1)[0].innerText = msg;
 
   // if the player wins
   if (msg === `4 Dead, 0 Injured`) {
@@ -337,7 +339,7 @@ function showReport(msg) {
     });
 
     // remove turnstate
-    turnState.classList.remove('active')
+    turnState.classList.remove("active");
 
     setTimeout(() => {
       guessBtn.classList.add("active");
@@ -354,7 +356,7 @@ function showReport(msg) {
 getNumBtn.addEventListener("click", getNewNumber);
 
 // code to check for max length
-document.querySelectorAll('.number-input').forEach((input) => {
+document.querySelectorAll(".number-input").forEach((input) => {
   console.log(input.maxLength);
 
   input.oninput = () => {
@@ -364,18 +366,17 @@ document.querySelectorAll('.number-input').forEach((input) => {
   };
 });
 
-customInput.oninput = () =>{
+customInput.oninput = () => {
   if (customInput.value.length > customInput.maxLength) {
     customInput.value = customInput.value.slice(0, customInput.maxLength);
   }
-}
+};
 
-lastInput.oninput = () =>{
+lastInput.oninput = () => {
   if (lastInput.value.length > lastInput.maxLength) {
     lastInput.value = lastInput.value.slice(0, lastInput.maxLength);
   }
-}
-
+};
 
 // function to create a player
 function createNewPlayer(data) {
@@ -388,22 +389,22 @@ function createNewPlayer(data) {
 
   // add click event handler
   player.addEventListener("click", selectPlayer);
-  player.addEventListener("click", ()=>{
-    playerList.classList.add('hidden')
+  player.addEventListener("click", () => {
+    playerList.classList.add("hidden");
   });
 
   // update player list with new player
   playerList.appendChild(player);
 }
 
-
-
 // function to select a player
 function selectPlayer(e) {
   // get selected player
   const player = e.currentTarget;
-  yourOpponent = e.currentTarget.innerText 
-document.querySelector('.opponent-username').textContent = `Opponent: ${yourOpponent}`
+  yourOpponent = e.currentTarget.innerText;
+  document.querySelector(
+    ".opponent-username"
+  ).textContent = `Opponent: ${yourOpponent}`;
   // make sure player isn't currently selected
   if (!player.classList.contains("player--selected")) {
     // remove previously highlighted player
@@ -417,23 +418,20 @@ document.querySelector('.opponent-username').textContent = `Opponent: ${yourOppo
   }
 }
 
-
-
 // CODE FOR HAMBURGER MENU OF PLAYERS
-const showPlayers = document.querySelector('.see-players')
-const closeBtn_players = document.querySelector('.close-btn--players')
+const showPlayers = document.querySelector(".see-players");
+const closeBtn_players = document.querySelector(".close-btn--players");
 
-showPlayers.addEventListener('click', ()=>{
-    playerList.classList.toggle("hidden")
-})
+showPlayers.addEventListener("click", () => {
+  playerList.classList.toggle("hidden");
+});
 
-closeBtn_players.addEventListener('click', ()=>{
-    playerList.classList.add("hidden")
-})
-
+closeBtn_players.addEventListener("click", () => {
+  playerList.classList.add("hidden");
+});
 
 // CODE TO SHOW CUSTOM INPUT FIELD
-const chooseNum = document.querySelector('.choose-number')
-chooseNum.addEventListener('click', ()=>{
-  customNumCont.classList.add('active')
-})
+const chooseNum = document.querySelector(".choose-number");
+chooseNum.addEventListener("click", () => {
+  customNumCont.classList.add("active");
+});
