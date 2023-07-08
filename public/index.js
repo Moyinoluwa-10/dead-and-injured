@@ -27,7 +27,7 @@ const playerList = document.querySelector(".player-list");
 let yourOpponent;
 
 const playerObj = {
-  status: "free",
+  status: "available",
   playing: false,
 };
 
@@ -68,16 +68,13 @@ document.querySelector(".your-username").textContent = `Username: ${username}`;
 
 socket.on("connect", () => {
   console.log("connected to server");
-  socket.emit("user:enter", { id: socket.id, username });
-  // create an 4 digit number for the user
-  let value = getNewNumber();
   console.log(socket.id);
   playerObj.id = socket.id;
-
-  // code to enter/input custom
-
-  players.push({ id: socket.id, username, value });
-  // console.log(players);
+  playerObj.username = username;
+  // create an 4 digit number for the user
+  let value = getNewNumber();
+  playerObj.number = value;
+  socket.emit("user:enter", playerObj);
 });
 
 socket.on("user:enter", (user) => {

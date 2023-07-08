@@ -11,14 +11,10 @@ const path = require("path");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.get("/", (req, res) => {
-//   res.setHeader("Content-Type", "text/html");
-//   // res.sendFile(__dirname + "/index.html");
-// });
+const players = [];
 
 io.on("connection", (socket) => {
   console.log("a user connected " + socket.id);
-  // io.emit("user_connected", "a user connected");
   socket.on("disconnect", () => {
     console.log("user disconnected " + socket.id);
   });
@@ -29,7 +25,7 @@ io.on("connection", async (socket) => {
   console.log("Client connected: ", socket.id);
 
   const sockets = await io.fetchSockets();
-  // Tell new user about previously existing users
+  // tell new user about previously existing users
   if (sockets.length > 1) {
     socket.emit(
       "user:dump",
@@ -39,12 +35,10 @@ io.on("connection", async (socket) => {
     );
   }
 
-  // Tell everyone else about new user
+  // tell everyone else about new user
   socket.on("user:enter", (data) => {
-    socket.username = data.username;
-    socket.id = data.id;
+    players.push(data);
     socket.broadcast.emit("user:enter", data);
-    // console.log("user:enter", data);
   });
 
   socket.on("disconnect", (reason) => {
