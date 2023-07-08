@@ -20,7 +20,7 @@ const guessHistory = document.querySelector(".guess-history");
 const turnState = document.querySelector(".turn-state");
 const lastInput = document.querySelector(".last-input");
 
-let el_await // span element that tells user to wait
+let el_await; // span element that tells user to wait
 let hiddenNumber;
 let customNum;
 const playerList = document.querySelector(".player-list");
@@ -133,12 +133,12 @@ socket.on("sendRequestResponse:get", (msg, userId) => {
   // console.log("sendRequestResponse", "response received");
   msg && selectPlayer(userId);
   !msg && alert("Player denied request");
-  if(msg){
-    el_await.innerText = ""
-  }
-  if(!msg){
-    el_await.innerText = ""
-  }
+  // if(msg){
+  //   el_await.innerText = ""
+  // }
+  // if(!msg){
+  //   el_await.innerText = ""
+  // }
 });
 
 const getNewNumber = () => {
@@ -421,22 +421,34 @@ lastInput.oninput = () => {
 // function to create a player
 function createNewPlayer(data) {
   // create a new player
-  const player = document.createElement("div");
+  const divEl = document.createElement("div");
+  const paraEl = document.createElement("p");
+  const spanEl = document.createElement("span");
+
   // add player attributes
-  player.id = data.id;
-  player.className = "player";
-  player.innerText = data.username;
+  divEl.id = `${data.id}`;
+  paraEl.id = `${data.id}`;
+  spanEl.id = `${data.id}`;
+  // divEl.id = `div${data.id}`;
+  // paraEl.id = `p${data.id}`;
+  // spanEl.id = `span${data.id}`;
+
+  divEl.className = "player";
+  paraEl.className = "player-name";
+  spanEl.className = "player-tag";
+
+  paraEl.innerText = data.username;
+  spanEl.innerText = data.username;
 
   // add click event handler
-  player.addEventListener("click", sendRequest);
-  // player.addEventListener("click", () => {
-  //   // console.log("hello");
-  //   // selectPlayer(e);
-  //   // playerList.classList.add("hidden");
-  // });
+  divEl.addEventListener("click", sendRequest);
+
+  // append elements to player
+  divEl.appendChild(paraEl);
+  divEl.appendChild(spanEl);
 
   // update player list with new player
-  playerList.appendChild(player);
+  playerList.appendChild(divEl);
 }
 
 function sendRequest(e) {
@@ -451,12 +463,11 @@ function sendRequest(e) {
   };
   sendTo = player.id;
 
-  el_await = document.createElement("span");
-  el_await.className = "player-tag"
-  el_await.innerText = "waiting response";
-  player.appendChild(el_await);
-  if(playerObj.playing){
-    
+  // el_await = document.createElement("span");
+  // el_await.className = "player-tag";
+  // el_await.innerText = "waiting response";
+  // player.appendChild(el_await);
+  if (playerObj.playing) {
   }
   socket.emit("sendRequest:post", sendTo, msg);
 }
