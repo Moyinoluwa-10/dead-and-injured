@@ -180,6 +180,9 @@ body {
   padding: 10px 20px;
   background: aqua;
   margin-bottom: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
 }
 
 .player.player--selected {
@@ -188,7 +191,6 @@ body {
 
 .player span {
   color: red;
-  float: right;
 }
 
 .heading {

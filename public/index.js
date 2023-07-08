@@ -27,6 +27,7 @@ const playerList = document.querySelector(".player-list");
 let yourOpponent;
 
 const playerObj = {
+  status: "free",
   playing: false,
 };
 
@@ -133,12 +134,6 @@ socket.on("sendRequestResponse:get", (msg, userId) => {
   // console.log("sendRequestResponse", "response received");
   msg && selectPlayer(userId);
   !msg && alert("Player denied request");
-  // if(msg){
-  //   el_await.innerText = ""
-  // }
-  // if(!msg){
-  //   el_await.innerText = ""
-  // }
 });
 
 const getNewNumber = () => {
@@ -426,31 +421,27 @@ function createNewPlayer(data) {
   const spanEl = document.createElement("span");
 
   // add player attributes
-  divEl.id = `${data.id}`;
-  paraEl.id = `${data.id}`;
-  spanEl.id = `${data.id}`;
-  // divEl.id = `div${data.id}`;
-  // paraEl.id = `p${data.id}`;
-  // spanEl.id = `span${data.id}`;
-
+  divEl.id = data.id;
+  paraEl.id = data.id;
+  spanEl.id = data.id;
   divEl.className = "player";
   paraEl.className = "player-name";
   spanEl.className = "player-tag";
-
   paraEl.innerText = data.username;
-  spanEl.innerText = data.username;
-
-  // add click event handler
-  divEl.addEventListener("click", sendRequest);
+  spanEl.innerText = "available";
 
   // append elements to player
   divEl.appendChild(paraEl);
   divEl.appendChild(spanEl);
 
+  // add click event handler
+  divEl.addEventListener("click", sendRequest);
+
   // update player list with new player
   playerList.appendChild(divEl);
 }
 
+// function to send a request to a player
 function sendRequest(e) {
   if (playerObj.playing) {
     alert("Please complete the current game");
@@ -462,39 +453,34 @@ function sendRequest(e) {
     username,
   };
   sendTo = player.id;
+  document.querySelector(`span#${player.id}`).textContent = "waiting response";
 
-  // el_await = document.createElement("span");
-  // el_await.className = "player-tag";
-  // el_await.innerText = "waiting response";
-  // player.appendChild(el_await);
-  if (playerObj.playing) {
-  }
   socket.emit("sendRequest:post", sendTo, msg);
 }
 
 // function to select a player
-function selectPlayer(userId) {
+function selectPlayer(id) {
   // get selected player
-  const player = document.querySelector(`#${userId}`);
-  yourOpponent = player.innerText;
+  const player = document.querySelector(`div#${id}`);
+  const playerName = document.querySelector(`p#${id}`);
+  yourOpponent = playerName.innerText;
   document.querySelector(
     ".opponent-username"
   ).textContent = `Opponent: ${yourOpponent}`;
+
   // make sure player isn't currently selected
   if (!player.classList.contains("player--selected")) {
     // remove previously highlighted player
     const prevUser = document.getElementsByClassName("player--selected")[0];
     if (prevUser) prevUser.classList.remove("player--selected");
 
-    // Highlight player clicked
+    // highlight player clicked
     player.classList.add("player--selected");
-    const el = document.createElement("span");
-    el.innerText = "playing";
-    player.appendChild(el);
-    sendTo = userId;
+    document.querySelector(`span#${id}`).textContent = "playing";
+    sendTo = id;
     playerObj.playing = true;
   }
-  console.log(playerObj);
+  playerList.classList.add("hidden");
 }
 
 // CODE FOR HAMBURGER MENU OF PLAYERS
