@@ -510,17 +510,20 @@ backGame.addEventListener("click", () => {
   const customNumArr = customNum.split("");
   const value = [];
   customNumArr.forEach((i) => value.push(Number(i)));
-
-  if (customNumArr.length < 4) {
+  
+  if( customNumArr.length === 0 || customNum === ""){
+    customNumCont.classList.remove("active");
+  } else if ( customNumArr.length < 4) {
     customInpErr.textContent = `Insufficient Numbers!`;
   } else if (repeatingNums(customNumArr)) {
     customInpErr.textContent = `Repeating Numbers detected!`;
-  } else {
+  }else {
     customNumCont.classList.remove("active");
+    hiddenNumber = value;
+    document.querySelector(
+      ".your-number"
+    ).textContent = `Your number: ${customNumArr.join("")}`;
   }
-  hiddenNumber = value;
-  document.querySelector(
-    ".your-number"
-  ).textContent = `Your number: ${customNumArr.join("")}`;
+
   // players.push({ id: socket.id, username, value });
 });
