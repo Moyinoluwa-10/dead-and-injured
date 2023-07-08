@@ -10,8 +10,11 @@ const closeBtn = document.querySelector(".close-btn");
 const guessBtn = document.querySelector(".guess-btn");
 const getNumBtn = document.querySelector(".get-number");
 const numberInputs = document.querySelectorAll(".number-input");
+const inputCont = document.querySelector('.container')
 const customInput = document.querySelector(".custom-number-input");
 const backGame = document.querySelector(".back-game");
+const createNum = document.querySelector('.create-num')
+const readyBtn = document.querySelector('.ready-btn')
 const customInpErr = document.querySelector(".custom-number-error");
 const customNumCont = document.querySelector(".custom-number-container");
 const historyTable1 = document.querySelector(".history-table");
@@ -29,6 +32,7 @@ let yourOpponent;
 const playerObj = {
   status: "free",
   playing: false,
+  ready: false,
 };
 
 // import { repeatingNums } from "./functions.js";
@@ -162,11 +166,19 @@ const getNewNumber = () => {
   turnState.classList.remove("active");
   // undisable guess-btn
   guessBtn.disabled = false;
+  guessBtn.textContent = "Guess!";
   guessMsg.textContent = "";
 
   // clearing history fields
   historyTable1.innerHTML = "";
   historyTable2.innerHTML = "";
+
+  // making input fields invisible
+  inputCont.classList.remove('ready')
+
+  // takes readybtn and guessbtn back to original state
+  readyBtn.classList.remove('active')
+  guessBtn.classList.add('not-ready')
 
   const displayedNumber = hiddenNumber.join("");
   document.querySelector(
@@ -374,8 +386,8 @@ function showReport(msg) {
     });
 
     // remove turnstate
-    turnState.classList.remove("active");
-
+    turnState.classList.remove("active")
+  
     setTimeout(() => {
       guessBtn.classList.add("active");
       getNumBtn.classList.add("active");
@@ -505,14 +517,14 @@ chooseNum.addEventListener("click", () => {
   customNumCont.classList.add("active");
 });
 
-backGame.addEventListener("click", () => {
+createNum.addEventListener('click', ()=>{
   customNum = customInput.value;
   const customNumArr = customNum.split("");
   const value = [];
   customNumArr.forEach((i) => value.push(Number(i)));
   
   if( customNumArr.length === 0 || customNum === ""){
-    customNumCont.classList.remove("active");
+    customInpErr.textContent = `Please type in your new number!`;
   } else if ( customNumArr.length < 4) {
     customInpErr.textContent = `Insufficient Numbers!`;
   } else if (repeatingNums(customNumArr)) {
@@ -523,7 +535,23 @@ backGame.addEventListener("click", () => {
     document.querySelector(
       ".your-number"
     ).textContent = `Your number: ${customNumArr.join("")}`;
+    customInpErr.textContent = ``;
+    customInput.value = ""
   }
+})
 
-  // players.push({ id: socket.id, username, value });
+backGame.addEventListener("click", () => {
+  customNumCont.classList.remove("active");
+  customInpErr.textContent = ``;
 });
+
+
+readyBtn.addEventListener('click', ()=>{
+  readyBtn.classList.add('active')
+  guessBtn.classList.remove('not-ready')
+  inputCont.classList.add('ready')
+  playerObj.ready = true
+  console.log(playerObj);
+})
+
+console.log(playerObj);

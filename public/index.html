@@ -23,7 +23,10 @@
 
         <p class="custom-number-error"></p>
 
+       <div class="custom-number-action-cont">
         <p class="back-game">Back to game</p>
+        <p class="create-num">Create number</p>
+       </div>
       </div>
 
       <div class="player-list">
@@ -82,7 +85,8 @@
             </div>
 
             <div class="operations-container">
-              <button class="guess-btn" onclick="submitAnswer()">Guess!</button
+              <button class="ready-btn">Ready</button>
+              <button class="guess-btn not-ready" onclick="submitAnswer()">Guess!</button
               ><br />
               <button class="get-number">Get New Number</button><br />
               <div class="turn-state"></div>
