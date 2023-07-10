@@ -111,11 +111,13 @@ socket.on("submitAnswer:get", (msg) => {
   if (!guessBtn.disabled) {
     guessBtn.textContent = "Guess!";
   }
+  document.querySelector(".opponent-status").textContent = ``;
 });
 
 socket.on("receiveReport:get", (msg) => {
   // console.log("receiveReport", msg);
   showReport(msg);
+  document.querySelector(".opponent-status").textContent = ``;
 });
 
 socket.on("sendRequest:get", (msg) => {
