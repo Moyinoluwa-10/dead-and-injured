@@ -11,7 +11,14 @@ const path = require("path");
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
 
-const players = [];
+const users = [];
+function removeObjectWithId(arr, id) {
+  const objWithIdIndex = arr.findIndex((obj) => obj.id === id);
+  if (objWithIdIndex > -1) {
+    arr.splice(objWithIdIndex, 1);
+  }
+  return arr;
+}
 
 io.on("connection", (socket) => {
   console.log("a user connected " + socket.id);
@@ -24,26 +31,27 @@ io.on("connection", (socket) => {
 io.on("connection", async (socket) => {
   console.log("Client connected: ", socket.id);
 
+  socket.on("disconnect", (reason) => {
+    console.log("Client disconnected: ", socket.id, `(${reason})`);
+    removeObjectWithId(users, socket.id);
+    socket.broadcast.emit("user:leave", socket.id);
+  });
+
   const sockets = await io.fetchSockets();
   // tell new user about previously existing users
   if (sockets.length > 1) {
     socket.emit(
       "user:dump",
-      sockets.map((s) => {
-        return { id: s.id, username: s.username };
+      users.map((user) => {
+        return { id: user.id, username: user.username };
       })
     );
   }
 
   // tell everyone else about new user
   socket.on("user:enter", (data) => {
-    players.push(data);
+    users.push(data);
     socket.broadcast.emit("user:enter", data);
-  });
-
-  socket.on("disconnect", (reason) => {
-    console.log("Client disconnected: ", socket.id, `(${reason})`);
-    socket.broadcast.emit("user:leave", socket.id);
   });
 
   socket.on("submitAnswer:post", (id, msg) => {

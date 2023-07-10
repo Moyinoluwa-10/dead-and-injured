@@ -83,9 +83,11 @@ socket.on("user:enter", (user) => {
 });
 
 socket.on("user:dump", (users) => {
+  console.log(users);
   // Add new user to list of connected users
   for (let { id, username } of users) {
     if (id !== socket.id) {
+      console.log("user:dump", id, username);
       // create new player
       createNewPlayer({ id, username });
     }
