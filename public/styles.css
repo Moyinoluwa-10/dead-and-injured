@@ -302,6 +302,13 @@ body {
   pointer-events: none;
 }
 
+.guess-btn:disabled {
+  /* opacity: 0.5; */
+  pointer-events: none;
+  cursor: not-allowed;
+  background-color: rgba(0, 128, 0, 0.5);
+}
+
 .ready-btn {
   background-color: green;
   pointer-events: all;

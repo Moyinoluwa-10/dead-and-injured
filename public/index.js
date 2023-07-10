@@ -133,7 +133,10 @@ socket.on("sendRequest:get", (msg) => {
 socket.on("sendRequestResponse:get", (msg, userId) => {
   // console.log("sendRequestResponse", "response received");
   msg && selectPlayer(userId);
-  !msg && alert("Player denied request");
+  if (!msg) {
+    document.querySelector(`span#${userId}`).textContent = "available";
+    alert("Player denied request");
+  }
 });
 
 socket.on("user:change", (users) => {
@@ -149,6 +152,7 @@ socket.on("ready:get", (msg) => {
   document.querySelector(
     ".opponent-status"
   ).textContent = `Opponent-status: ready`;
+  guessBtn.disabled = false;
 });
 
 const getNewNumber = () => {
@@ -176,7 +180,7 @@ const getNewNumber = () => {
   // removes turnState
   turnState.classList.remove("active");
   // undisable guess-btn
-  guessBtn.disabled = false;
+  // guessBtn.disabled = false;
   guessBtn.textContent = "Guess!";
   guessMsg.textContent = "";
 
