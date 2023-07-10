@@ -155,6 +155,7 @@ socket.on("ready:get", (msg) => {
     ".opponent-status"
   ).textContent = `Opponent-status: ready`;
   guessBtn.disabled = false;
+  guessBtn.textContent = "Guess!"
 });
 
 const getNewNumber = () => {
@@ -183,7 +184,9 @@ const getNewNumber = () => {
   turnState.classList.remove("active");
   // undisable guess-btn
   // guessBtn.disabled = false;
-  guessBtn.textContent = "Guess!";
+  if(!guessBtn.disabled){
+    guessBtn.textContent = "Guess!";
+  }
   guessMsg.textContent = "";
 
   // clearing history fields
@@ -535,7 +538,7 @@ closeBtn_players.addEventListener("click", () => {
 // CODE TO SHOW CUSTOM INPUT FIELD
 const chooseNum = document.querySelector(".choose-number");
 chooseNum.addEventListener("click", () => {
-  if (playerObj.playing) {
+  if (playerObj.ready) {
     alert("You can't change numbers during a game");
     return;
   }
