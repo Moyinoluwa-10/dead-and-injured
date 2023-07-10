@@ -20,6 +20,15 @@ function removeObjectWithId(arr, id) {
   return arr;
 }
 
+const findByIdAndUpdate = (array, updatedObj) => {
+  return array.map((item) => {
+    if (item.id === updatedObj.id) {
+      return { ...item, ...updatedObj };
+    }
+    return item;
+  });
+};
+
 io.on("connection", (socket) => {
   console.log("a user connected " + socket.id);
   socket.on("disconnect", () => {
@@ -73,9 +82,10 @@ io.on("connection", async (socket) => {
     socket.to(id).emit("sendRequestResponse:get", msg, userId);
   });
 
-  // socket.on("sendRequest:post", (id, msg) => {
-  //   socket.to(id).emit("sendRequest:get", msg);
-  // });
+  socket.on("ready:post", (id, msg) => {
+    findByIdAndUpdate(users, msg);
+    socket.to(id).emit("ready:get", msg);
+  });
 });
 
 server.listen(PORT, () => {

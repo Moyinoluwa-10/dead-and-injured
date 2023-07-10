@@ -145,6 +145,12 @@ socket.on("user:change", (users) => {
   }
 });
 
+socket.on("ready:get", (msg) => {
+  document.querySelector(
+    ".opponent-status"
+  ).textContent = `Opponent-status: ready`;
+});
+
 const getNewNumber = () => {
   let v = getRandomNumber();
   let w = getRandomNumber(v);
@@ -488,6 +494,10 @@ function selectPlayer(id) {
   document.querySelector(
     ".opponent-username"
   ).textContent = `Opponent: ${yourOpponent}`;
+  document.querySelector(
+    ".opponent-status"
+  ).textContent = `Opponent-status: not-ready`;
+  readyBtn.disabled = false;
 
   // make sure player isn't currently selected
   if (!player.classList.contains("player--selected")) {
@@ -559,7 +569,5 @@ readyBtn.addEventListener("click", () => {
   guessBtn.classList.remove("not-ready");
   inputCont.classList.add("ready");
   playerObj.ready = true;
-  console.log(playerObj);
+  socket.emit("ready:post", sendTo, { id: socket.id, ready: true });
 });
-
-console.log(playerObj);
