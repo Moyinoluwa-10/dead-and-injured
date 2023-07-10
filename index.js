@@ -40,12 +40,7 @@ io.on("connection", async (socket) => {
   const sockets = await io.fetchSockets();
   // tell new user about previously existing users
   if (sockets.length > 1) {
-    socket.emit(
-      "user:dump",
-      users.map((user) => {
-        return { id: user.id, username: user.username };
-      })
-    );
+    socket.emit("user:dump", users);
   }
 
   // tell everyone else about new user
@@ -67,6 +62,14 @@ io.on("connection", async (socket) => {
   });
 
   socket.on("sendRequestResponse:post", (id, msg, userId) => {
+    if (msg) {
+      // update status of users object of the two users to playing
+      const user1 = users.find((user) => user.id === userId);
+      const user2 = users.find((user) => user.id === id);
+      user1.playing = true;
+      user2.playing = true;
+    }
+    socket.broadcast.emit("user:change", users);
     socket.to(id).emit("sendRequestResponse:get", msg, userId);
   });
 
