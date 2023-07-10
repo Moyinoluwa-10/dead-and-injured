@@ -72,6 +72,10 @@ body {
   transition: 0.3s ease;
 }
 
+.custom-number-container h2{
+  font-size: 1.8rem;
+}
+
 .custom-number-container.active {
   opacity: 1;
   pointer-events: all;
@@ -82,9 +86,22 @@ body {
 }
 
 .custom-number-container p {
+  font-size: 1.5rem;
   color: white;
-  text-decoration: underline;
   cursor: pointer;
+
+}
+
+.custom-number-action-cont{
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  align-items: center;
+}
+.custom-number-action-cont p{
+  border: 1px solid white;
+  padding: 10px;
+  border-radius: 5px;
 }
 
 .custom-number-input {
@@ -202,12 +219,24 @@ body {
 }
 
 .container {
+  opacity: 0;
   display: flex;
+  transform: translateY(-50px);
   justify-content: center;
   align-items: center;
   margin-bottom: 10px;
   margin-top: 20px;
   gap: 1.874rem;
+  pointer-events: none;
+  transition: 0.5s ease;
+  position: absolute;
+}
+
+.container.ready{
+pointer-events: all;
+opacity: 1;
+transform: translateY(0px);
+position: relative;
 }
 
 .box {
@@ -241,11 +270,12 @@ body {
   justify-content: center;
   align-items: center;
   gap: 5px;
+  position: relative;
 }
 
 .guess-btn,
 .get-number,
-.turn-state {
+.turn-state, .ready-btn {
   padding: 10px;
   margin-top: 40px;
   font-size: 1.5rem;
@@ -259,6 +289,28 @@ body {
 
 .guess-btn {
   background-color: green;
+  position: relative;
+  right: 0;
+  transition: 0.7s ease;
+  pointer-events: all;
+}
+
+.guess-btn.not-ready{
+  opacity: 0;
+  transform: translateY(-50px);
+  position: absolute;
+  pointer-events: none;
+}
+
+.ready-btn{
+  background-color: green;
+  pointer-events: all;
+}
+
+.ready-btn.active{
+  opacity: 0;
+  pointer-events: none;
+  position: absolute;
 }
 
 .turn-state {
