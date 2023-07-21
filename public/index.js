@@ -29,10 +29,14 @@ let customNum;
 const playerList = document.querySelector(".player-list");
 let yourOpponent;
 
+import { selectPlayer, changeVariableValue } from "./functions.js";
+
 const playerObj = {
   status: "available",
   playing: false,
   ready: false,
+  sendTo: null,
+  yourOpponent: null,
 };
 
 // import { repeatingNums } from "./functions.js";
@@ -71,8 +75,7 @@ let sendTo;
 document.querySelector(".your-username").textContent = `Username: ${username}`;
 
 socket.on("connect", () => {
-  console.log("connected to server");
-  console.log(socket.id);
+  console.log("connected to server", socket.id);
   playerObj.id = socket.id;
   playerObj.username = username;
   // create an 4 digit number for the user
@@ -126,15 +129,24 @@ socket.on("sendRequest:get", (msg) => {
   console.log(response);
   if (response) {
     console.log("testing");
-    selectPlayer(msg.userId);
-    playerObj.playing = true;
+    selectPlayer(msg.userId, playerObj, readyBtn, playerList);
+    sendTo = playerObj.sendTo;
+    yourOpponent = playerObj.yourOpponent;
   }
+  console.log("sendRequest", sendTo);
   socket.emit("sendRequestResponse:post", msg.userId, response, socket.id);
 });
 
 socket.on("sendRequestResponse:get", (msg, userId) => {
   // console.log("sendRequestResponse", "response received");
-  msg && selectPlayer(userId);
+  if (msg) {
+    selectPlayer(userId, playerObj, readyBtn, playerList);
+    sendTo = playerObj.sendTo;
+    yourOpponent = playerObj.yourOpponent;
+  }
+  // msg &&
+  //   selectPlayer(userId, playerObj, yourOpponent, readyBtn, sendTo, playerList);
+  console.log("sendRequestResponse", sendTo);
   if (!msg) {
     document.querySelector(`span#${userId}`).textContent = "available";
     alert("Player denied request");
@@ -151,11 +163,12 @@ socket.on("user:change", (users) => {
 });
 
 socket.on("ready:get", (msg) => {
+  console.log("ready:get", msg);
   document.querySelector(
     ".opponent-status"
   ).textContent = `Opponent-status: ready`;
   guessBtn.disabled = false;
-  guessBtn.textContent = "Guess!"
+  guessBtn.textContent = "Guess!";
 });
 
 const getNewNumber = () => {
@@ -184,7 +197,7 @@ const getNewNumber = () => {
   turnState.classList.remove("active");
   // undisable guess-btn
   // guessBtn.disabled = false;
-  if(!guessBtn.disabled){
+  if (!guessBtn.disabled) {
     guessBtn.textContent = "Guess!";
   }
   guessMsg.textContent = "";
@@ -235,6 +248,7 @@ function getRandomNumber(a, b, c, d) {
 // Array that stores guesses and responses
 const historyArr = [];
 
+guessBtn.addEventListener("click", submitAnswer);
 // function to submit answer
 function submitAnswer() {
   // let numbers = [Number(a.value), Number(b.value), Number(c.value), Number(d.value)];
@@ -492,35 +506,6 @@ function sendRequest(e) {
   document.querySelector(`span#${player.id}`).textContent = "waiting response";
 
   socket.emit("sendRequest:post", sendTo, msg);
-}
-
-// function to select a player
-function selectPlayer(id) {
-  // get selected player
-  const player = document.querySelector(`div#${id}`);
-  const playerName = document.querySelector(`p#${id}`);
-  yourOpponent = playerName.innerText;
-  document.querySelector(
-    ".opponent-username"
-  ).textContent = `Opponent: ${yourOpponent}`;
-  document.querySelector(
-    ".opponent-status"
-  ).textContent = `Opponent-status: not-ready`;
-  readyBtn.disabled = false;
-
-  // make sure player isn't currently selected
-  if (!player.classList.contains("player--selected")) {
-    // remove previously highlighted player
-    const prevUser = document.getElementsByClassName("player--selected")[0];
-    if (prevUser) prevUser.classList.remove("player--selected");
-
-    // highlight player clicked
-    player.classList.add("player--selected");
-    document.querySelector(`span#${id}`).textContent = "playing";
-    sendTo = id;
-    playerObj.playing = true;
-  }
-  playerList.classList.add("hidden");
 }
 
 // CODE FOR HAMBURGER MENU OF PLAYERS

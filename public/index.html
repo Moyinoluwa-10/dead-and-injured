@@ -88,13 +88,7 @@
 
             <div class="operations-container">
               <button class="ready-btn" disabled>Ready</button>
-              <button
-                class="guess-btn not-ready"
-                disabled
-                onclick="submitAnswer()"
-              >
-                Wait!</button
-              ><br />
+              <button class="guess-btn not-ready" disabled>Wait!</button><br />
               <button class="get-number">Get New Number</button><br />
               <div class="turn-state"></div>
             </div>
@@ -146,8 +140,8 @@
     </div>
 
     <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
-    <script src="index.js"></script>
-    <script src="functions.js"></script>
+    <script src="index.js" type="module"></script>
+    <!-- <script src="functions.js"></script> -->
     <!-- <script src="functions.js"></script> -->
   </body>
 </html>

@@ -77,8 +77,8 @@ io.on("connection", async (socket) => {
       const user2 = users.find((user) => user.id === id);
       user1.playing = true;
       user2.playing = true;
+      socket.broadcast.emit("user:change", users);
     }
-    socket.broadcast.emit("user:change", users);
     socket.to(id).emit("sendRequestResponse:get", msg, userId);
   });
 
