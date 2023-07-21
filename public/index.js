@@ -29,7 +29,11 @@ let customNum;
 const playerList = document.querySelector(".player-list");
 let yourOpponent;
 
-import { selectPlayer, changeVariableValue } from "./functions.js";
+import {
+  selectPlayer,
+  repeatingNumbers,
+  createNewPlayer,
+} from "./functions.js";
 
 const playerObj = {
   status: "available",
@@ -37,24 +41,6 @@ const playerObj = {
   ready: false,
   sendTo: null,
   yourOpponent: null,
-};
-
-// import { repeatingNums } from "./functions.js";
-
-// This function checks for repeating numbers
-const repeatingNums = (Num) => {
-  if (
-    Num[0] === Num[1] ||
-    Num[0] === Num[2] ||
-    Num[0] === Num[3] ||
-    Num[1] === Num[2] ||
-    Num[1] === Num[3] ||
-    Num[2] === Num[3]
-  ) {
-    return true;
-  } else {
-    return false;
-  }
 };
 
 const players = [];
@@ -86,14 +72,14 @@ socket.on("connect", () => {
 
 socket.on("user:enter", (user) => {
   // create new player
-  createNewPlayer(user);
+  createNewPlayer(user, sendRequest, playerList);
 });
 
 socket.on("user:dump", (users) => {
   // add new user to list of connected users
   for (let user of users) {
     if (user.id !== socket.id) {
-      createNewPlayer(user);
+      createNewPlayer(user, sendRequest, playerList);
     }
   }
 });
@@ -126,14 +112,11 @@ socket.on("receiveReport:get", (msg) => {
 socket.on("sendRequest:get", (msg) => {
   // console.log("sendRequest", "request sent");
   const response = confirm(`${msg.username} wants to play with you`);
-  console.log(response);
   if (response) {
-    console.log("testing");
     selectPlayer(msg.userId, playerObj, readyBtn, playerList);
     sendTo = playerObj.sendTo;
     yourOpponent = playerObj.yourOpponent;
   }
-  console.log("sendRequest", sendTo);
   socket.emit("sendRequestResponse:post", msg.userId, response, socket.id);
 });
 
@@ -163,7 +146,6 @@ socket.on("user:change", (users) => {
 });
 
 socket.on("ready:get", (msg) => {
-  console.log("ready:get", msg);
   document.querySelector(
     ".opponent-status"
   ).textContent = `Opponent-status: ready`;
@@ -268,7 +250,7 @@ function submitAnswer() {
   if (refineNumbers.length < 4 || refineNumbers.length === 0) {
     alert("Insufficient Numbers!, choose another number");
     return;
-  } else if (repeatingNums(refineNumbers)) {
+  } else if (repeatingNumbers(refineNumbers)) {
     alert("Repeating Numbers detected!, choose another number");
     return;
   }
@@ -460,36 +442,36 @@ lastInput.oninput = () => {
 };
 
 // function to create a player
-function createNewPlayer(data) {
-  // create a new player
-  const divEl = document.createElement("div");
-  const paraEl = document.createElement("p");
-  const spanEl = document.createElement("span");
+// function createNewPlayer(data) {
+//   // create a new player
+//   const divEl = document.createElement("div");
+//   const paraEl = document.createElement("p");
+//   const spanEl = document.createElement("span");
 
-  // add player attributes
-  divEl.id = data.id;
-  paraEl.id = data.id;
-  spanEl.id = data.id;
-  divEl.className = "player";
-  paraEl.className = "player-name";
-  spanEl.className = "player-tag";
-  paraEl.innerText = data.username;
-  if (data.playing) {
-    spanEl.innerText = "playing";
-  } else {
-    spanEl.innerText = "available";
-  }
+//   // add player attributes
+//   divEl.id = data.id;
+//   paraEl.id = data.id;
+//   spanEl.id = data.id;
+//   divEl.className = "player";
+//   paraEl.className = "player-name";
+//   spanEl.className = "player-tag";
+//   paraEl.innerText = data.username;
+//   if (data.playing) {
+//     spanEl.innerText = "playing";
+//   } else {
+//     spanEl.innerText = "available";
+//   }
 
-  // append elements to player
-  divEl.appendChild(paraEl);
-  divEl.appendChild(spanEl);
+//   // append elements to player
+//   divEl.appendChild(paraEl);
+//   divEl.appendChild(spanEl);
 
-  // add click event handler
-  divEl.addEventListener("click", sendRequest);
+//   // add click event handler
+//   divEl.addEventListener("click", sendRequest);
 
-  // update player list with new player
-  playerList.appendChild(divEl);
-}
+//   // update player list with new player
+//   playerList.appendChild(divEl);
+// }
 
 // function to send a request to a player
 function sendRequest(e) {
@@ -540,7 +522,7 @@ createNum.addEventListener("click", () => {
     customInpErr.textContent = `Please type in your new number!`;
   } else if (customNumArr.length < 4) {
     customInpErr.textContent = `Insufficient Numbers!`;
-  } else if (repeatingNums(customNumArr)) {
+  } else if (repeatingNumbers(customNumArr)) {
     customInpErr.textContent = `Repeating Numbers detected!`;
   } else {
     customNumCont.classList.remove("active");
